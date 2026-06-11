@@ -281,14 +281,14 @@ input[type="time"]::-webkit-calendar-picker-indicator{cursor:pointer;filter:opac
         <label class="cl">SIGFI Atual</label>
         <select class="cs" name="sigfi_atual">
           <option value="">Selecionar...</option>
-          <option>Ligação Nova</option><option>30</option><option>45</option><option>60</option><option>80</option><option>120</option><option>180</option>
+          <option>Ligação Nova</option><option>30</option><option>80</option><option>120</option><option>180</option>
         </select>
       </div>
       <div class="cg">
         <label class="cl">Novo SIGFI</label>
         <select class="cs" name="sigfi_alteracao" id="sigfi_alteracao_sel">
           <option value="">Selecionar...</option>
-          <option>30</option><option>45</option><option>60</option><option>80</option><option>120</option><option>180</option>
+          <option>30</option><option>80</option><option>120</option><option>180</option>
         </select>
       </div>
 
@@ -310,20 +310,24 @@ input[type="time"]::-webkit-calendar-picker-indicator{cursor:pointer;filter:opac
           <div id="sigfi-detalhes" style="display:none;background:#f8fafc;border:1px solid #e2e8f0;border-radius:6px;padding:10px;font-size:.8rem;">
             <table style="width:100%;border-collapse:collapse;">
               <tr style="border-bottom:1px solid #e2e8f0">
-                <td style="padding:5px 4px;color:#64748b;font-weight:600">Mão de obra — Retirada</td>
-                <td id="val-mo-ret" style="padding:5px 4px;text-align:right;font-family:var(--mono);font-weight:700;color:#0f172a"></td>
+                <td style="padding:4px 4px;color:#64748b;font-weight:600">MO Retirada de estrutura</td>
+                <td id="val-mo-ret" style="padding:4px 4px;text-align:right;font-family:var(--mono);font-weight:700;color:#0f172a"></td>
               </tr>
               <tr style="border-bottom:1px solid #e2e8f0">
-                <td style="padding:5px 4px;color:#64748b;font-weight:600">Mão de obra — Instalação</td>
-                <td id="val-mo-inst" style="padding:5px 4px;text-align:right;font-family:var(--mono);font-weight:700;color:#0f172a"></td>
+                <td style="padding:4px 4px;color:#64748b;font-weight:600">MO Instalação do sistema</td>
+                <td id="val-mo-inst" style="padding:4px 4px;text-align:right;font-family:var(--mono);font-weight:700;color:#0f172a"></td>
               </tr>
               <tr style="border-bottom:1px solid #e2e8f0">
-                <td style="padding:5px 4px;color:#64748b;font-weight:600">Material</td>
-                <td id="val-material" style="padding:5px 4px;text-align:right;font-family:var(--mono);font-weight:700;color:#0f172a"></td>
+                <td style="padding:4px 4px;color:#64748b;font-weight:600">Estrutura Nova (material)</td>
+                <td id="val-estrutura" style="padding:4px 4px;text-align:right;font-family:var(--mono);font-weight:700;color:#0f172a"></td>
               </tr>
-              <tr style="background:#f0fdf4;">
-                <td style="padding:6px 4px;font-weight:800;color:#15803d;font-size:.85rem">TOTAL</td>
-                <td id="val-total" style="padding:6px 4px;text-align:right;font-family:var(--mono);font-weight:800;color:#15803d;font-size:.9rem"></td>
+              <tr style="border-bottom:1px solid #e2e8f0">
+                <td style="padding:4px 4px;color:#64748b;font-weight:600">Sistema Fotovoltaico</td>
+                <td id="val-sistema" style="padding:4px 4px;text-align:right;font-family:var(--mono);font-weight:700;color:#0f172a"></td>
+              </tr>
+              <tr id="total-row" style="background:#f0fdf4;">
+                <td id="total-label" style="padding:5px 4px;font-weight:800;color:#15803d;font-size:.75rem">TOTAL</td>
+                <td id="val-total" style="padding:5px 4px;text-align:right;font-family:var(--mono);font-weight:800;color:#15803d;font-size:.85rem"></td>
               </tr>
             </table>
           </div>
@@ -1146,11 +1150,12 @@ function formatarMoedaBR(valor) {
   return 'R$ ' + valor.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 }
 
-var MO_RETIRADA    = { 30: 1023.17, 80: 1151.00, 120: 1278.97, 180: 1278.97 };
-var MO_INSTALACAO  = { 80: 6020.61, 120: 7129.66, 180: 8070.83 };
-var MATERIAL_INST  = { 80: 27386.28, 120: 34268.51, 180: 48494.16 };
-var BASE_SIGFI_PU  = [30, 80];
-var BASE_SIGFI_PC  = [120, 180];
+var MO_RETIRADA        = { 30: 1076.63, 80: 1211.14, 120: 1345.80, 180: 1345.80 };
+var MO_INSTALACAO      = { 80: 6335.20, 120: 7502.20, 180: 8492.55 };
+var ESTRUTURA_NOVA     = { 80: 6409.81, 120: 7433.92, 180: 8485.81 };
+var SISTEMA_FOTOVOLTAICO = { 80: 22060.97, 120: 28191.62, 180: 41928.72 };
+var BASE_SIGFI_PU      = [30, 80];
+var BASE_SIGFI_PC      = [120, 180];
 
 function triggerCalcVisibility() {
   var box = document.getElementById('calc-sigfi-box');
@@ -1159,7 +1164,6 @@ function triggerCalcVisibility() {
 
 function calcularOrcamentoSIGFI() {
   var tipoLN  = document.querySelector('input[name="ligacao_nova_fv"]:checked');
-  var tipoAlt = document.querySelector('input[name="alteracao_carga_fv"]:checked');
   var sigfiAtual   = document.querySelector('[name="sigfi_atual"]')?.value || '';
   var sigfiPedido  = document.querySelector('[name="sigfi_alteracao"]')?.value || '';
 
@@ -1170,7 +1174,7 @@ function calcularOrcamentoSIGFI() {
   resultado.style.display = 'flex';
 
   if (!sigfiPedido || sigfiPedido === '') {
-    badge.textContent = '⚠️ Selecione o Novo SIGFI acima';
+    badge.textContent = 'Selecione o Novo SIGFI acima';
     badge.style.background = '#fef9c3'; badge.style.color = '#92400e';
     detalhes.style.display = 'none';
     return;
@@ -1178,46 +1182,48 @@ function calcularOrcamentoSIGFI() {
 
   var pedidoNum = parseInt(sigfiPedido);
   var atualNum  = parseInt(sigfiAtual) || 0;
-
   var ehLigacaoNova = (tipoLN && tipoLN.value === 'sim') || sigfiAtual === 'Ligação Nova';
-  if (ehLigacaoNova) {
-    badge.textContent = '✅ SEM CUSTO AO CLIENTE — Ligação Nova';
+
+  // Calcular componentes
+  var moRet  = ehLigacaoNova ? 0 : (MO_RETIRADA[atualNum] || 0);
+  var moInst = MO_INSTALACAO[pedidoNum] || 0;
+  var estrut = ESTRUTURA_NOVA[pedidoNum] || 0;
+  var sistema = SISTEMA_FOTOVOLTAICO[pedidoNum] || 0;
+  var total  = moRet + moInst + estrut + sistema;
+
+  // Preencher valores
+  document.getElementById('val-mo-ret').textContent     = ehLigacaoNova ? '—' : formatarMoedaBR(moRet);
+  document.getElementById('val-mo-inst').textContent    = formatarMoedaBR(moInst);
+  document.getElementById('val-estrutura').textContent  = formatarMoedaBR(estrut);
+  document.getElementById('val-sistema').textContent    = formatarMoedaBR(sistema);
+  detalhes.style.display = 'block';
+
+  var totalRow = document.getElementById('total-row');
+  var totalLabel = document.getElementById('total-label');
+  var totalVal = document.getElementById('val-total');
+  totalVal.textContent = formatarMoedaBR(total);
+
+  if (ehLigacaoNova || BASE_SIGFI_PU.includes(pedidoNum)) {
+    badge.textContent = '✅ SEM CUSTO AO CLIENTE';
     badge.style.background = '#f0fdf4'; badge.style.color = '#15803d';
     badge.style.border = '1px solid #bbf7d0';
-    detalhes.style.display = 'none';
-    return;
-  }
-
-  if (BASE_SIGFI_PU.includes(pedidoNum)) {
-    badge.textContent = '✅ SEM CUSTO AO CLIENTE — SIGFI ' + pedidoNum + ' (PU)';
-    badge.style.background = '#f0fdf4'; badge.style.color = '#15803d';
-    badge.style.border = '1px solid #bbf7d0';
-    detalhes.style.display = 'none';
-    return;
-  }
-
-  if (BASE_SIGFI_PC.includes(pedidoNum)) {
-    var moRet    = MO_RETIRADA[atualNum]   || 0;
-    var moInst   = MO_INSTALACAO[pedidoNum] || 0;
-    var material = MATERIAL_INST[pedidoNum] || 0;
-    var total    = moRet + moInst + material;
-
-    badge.textContent = '💰 COM CUSTO AO CLIENTE — SIGFI ' + pedidoNum + ' (PC)';
+    totalRow.style.background = '#f0fdf4';
+    totalLabel.textContent = 'TOTAL - SEM CUSTO AO CLIENTE';
+    totalLabel.style.color = '#15803d';
+    totalVal.style.color = '#15803d';
+  } else if (BASE_SIGFI_PC.includes(pedidoNum)) {
+    badge.textContent = '💰 COM CUSTO AO CLIENTE';
     badge.style.background = '#fef2f2'; badge.style.color = '#dc2626';
     badge.style.border = '1px solid #fecaca';
-
-    document.getElementById('val-mo-ret').textContent   = formatarMoedaBR(moRet);
-    document.getElementById('val-mo-inst').textContent  = formatarMoedaBR(moInst);
-    document.getElementById('val-material').textContent = formatarMoedaBR(material);
-    document.getElementById('val-total').textContent    = formatarMoedaBR(total);
-    detalhes.style.display = 'block';
-    return;
+    totalRow.style.background = '#fef2f2';
+    totalLabel.textContent = 'TOTAL - COM CUSTO AO CLIENTE';
+    totalLabel.style.color = '#dc2626';
+    totalVal.style.color = '#dc2626';
+  } else {
+    badge.textContent = 'SIGFI ' + sigfiPedido + ' nao reconhecido';
+    badge.style.background = '#fef9c3'; badge.style.color = '#92400e';
+    badge.style.border = '1px solid #fde68a';
   }
-
-  badge.textContent = '⚠️ SIGFI ' + sigfiPedido + ' não reconhecido para orçamento';
-  badge.style.background = '#fef9c3'; badge.style.color = '#92400e';
-  badge.style.border = '1px solid #fde68a';
-  detalhes.style.display = 'none';
 }
 
 // ── FV GATE: escuta mudanças ──
@@ -1359,7 +1365,7 @@ function mostrarToast(msg, tipo) {
   setTimeout(function() { t.classList.remove('visivel'); setTimeout(function() { t.remove(); }, 400); }, 3500);
 }
 
-// ── PDF (FORMATO OTIMIZADO — OCUPA A FOLHA INTEIRA) ──
+// ── PDF (UMA FOLHA - FV SO CLIENTE+FV, NAO-FV TUDO) ──
 function gerarPDF() {
   var form = document.getElementById('form-viabilidade');
   var radiosGrupos = {};
@@ -1377,7 +1383,7 @@ function gerarPDF() {
     });
     var primeira = document.querySelector('.sem-resposta-aviso');
     if (primeira) primeira.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    if (!confirm('⚠️ ' + semResposta.length + ' pergunta(s) sem resposta (destacadas em laranja).\n\nGerar o PDF mesmo assim?')) return;
+    if (!confirm('! ' + semResposta.length + ' pergunta(s) sem resposta (destacadas em laranja).\n\nGerar o PDF mesmo assim?')) return;
   }
   document.querySelectorAll('.sem-resposta-aviso').forEach(function(el) { el.classList.remove('sem-resposta-aviso'); });
 
@@ -1386,6 +1392,9 @@ function gerarPDF() {
   var fd = new FormData(form);
   var v = function(name) { var val = fd.get(name); return (val && val !== '') ? val : '-'; };
   var t = function(ddd, tel) { return (fd.get(ddd) && fd.get(tel)) ? '(' + fd.get(ddd) + ') ' + fd.get(tel) : (fd.get(tel) || '-'); };
+
+  var fvGate = v('fotovoltaico_gate').toUpperCase();
+  var ehFV = fvGate === 'SIM';
 
   var tensao = '';
   if (document.getElementById('tensao_345_chk').checked) tensao = '34,5kV';
@@ -1396,29 +1405,29 @@ function gerarPDF() {
   var lv = linhaVivaVal === 'SIM';
   var anotacoes = v('anotacoes');
 
-  var pgW = 297;
-  var margin = 8;
+  var pgW = 297, pgH = 210;
+  var margin = 6;
   var utilW = pgW - margin * 2;
 
-  // HEADER
-  doc.setFillColor(22,101,52); doc.rect(0,0,pgW,11,'F');
-  doc.setTextColor(255,255,255); doc.setFont('helvetica','bold'); doc.setFontSize(10);
-  doc.text('FORMULÁRIO DE VIABILIDADE TÉCNICA — EKT ENGENHARIA',pgW/2,5.5,{align:'center'});
-  doc.setFontSize(6.5);
-  doc.text('Neoenergia Elektro · EKT-FRG-EXE-001 · Rev.06',pgW/2,9.5,{align:'center'});
+  // ── HEADER ──
+  doc.setFillColor(22,101,52); doc.rect(0,0,pgW,9,'F');
+  doc.setTextColor(255,255,255); doc.setFont('helvetica','bold'); doc.setFontSize(9);
+  doc.text('FORMULARIO DE VIABILIDADE TECNICA - EKT ENGENHARIA',pgW/2,5,{align:'center'});
+  doc.setFontSize(5.5);
+  doc.text('Neoenergia Elektro - EKT-FRG-EXE-001 - Rev.06',pgW/2,8,{align:'center'});
 
-  var y = 13;
+  var y = 11;
   if (lv) {
-    doc.setFillColor(220,38,38); doc.rect(0,y,pgW,6,'F');
-    doc.setTextColor(255,255,255); doc.setFontSize(8.5);
-    doc.text('⚠  ATENÇÃO: LINHA VIVA CONFIRMADA NESTA OBRA  ⚠',pgW/2,y+4.2,{align:'center'});
-    y += 8;
+    doc.setFillColor(220,38,38); doc.rect(0,y,pgW,5,'F');
+    doc.setTextColor(255,255,255); doc.setFontSize(7);
+    doc.text('! ATENCAO: LINHA VIVA CONFIRMADA NESTA OBRA !',pgW/2,y+3.5,{align:'center'});
+    y += 6.5;
   }
 
-  // ── SEÇÃO 1: DADOS DO CLIENTE (2 colunas largas) ──
+  // ── CLIENTE + PROJETISTAS (sempre) ──
   var clientData = [
     ['CLIENTE', v('nome_cliente')],
-    ['CÓD. PROJETO', v('codigo_projeto')],
+    ['COD. PROJETO', v('codigo_projeto')],
     ['TELEFONE', t('ddd_cliente','telefone_cliente')],
     ['DATA', v('data')],
     ['PROJETISTA 1', v('projetista1')],
@@ -1427,14 +1436,14 @@ function gerarPDF() {
     ['TEL. PROJETISTA 2', t('ddd_projetista2','telefone_projetista2')],
   ];
 
-  doc.setFillColor(22,101,52); doc.rect(margin,y,utilW,5,'F');
-  doc.setTextColor(255,255,255); doc.setFont('helvetica','bold'); doc.setFontSize(7);
-  doc.text('DADOS DO CLIENTE / PROJETISTAS',margin+2,y+3.6);
-  y += 5.5;
+  doc.setFillColor(22,101,52); doc.rect(margin,y,utilW,4,'F');
+  doc.setTextColor(255,255,255); doc.setFont('helvetica','bold'); doc.setFontSize(6);
+  doc.text('DADOS DO CLIENTE / PROJETISTAS',margin+2,y+2.8);
+  y += 4.5;
 
   var colW2 = utilW / 2;
   var rowH = 5.2;
-  doc.setDrawColor(200,200,200); doc.setLineWidth(0.2);
+  doc.setDrawColor(200,200,200); doc.setLineWidth(0.15);
   for (var i=0; i<clientData.length; i+=2) {
     for (var c=0; c<2; c++) {
       var idx = i + c;
@@ -1443,175 +1452,238 @@ function gerarPDF() {
       var x = margin + c * colW2;
       doc.setFillColor(248,250,252); doc.rect(x,y,colW2,rowH,'F');
       doc.rect(x,y,colW2,rowH,'S');
-      doc.setFont('helvetica','bold'); doc.setFontSize(6.5); doc.setTextColor(37,99,235);
+      doc.setFont('helvetica','bold'); doc.setFontSize(5.5); doc.setTextColor(37,99,235);
       doc.text(item[0], x+1.5, y+2);
-      doc.setFont('helvetica','normal'); doc.setFontSize(7.5); doc.setTextColor(15,23,42);
+      doc.setFont('helvetica','normal'); doc.setFontSize(6.5); doc.setTextColor(15,23,42);
       doc.text(item[1]||'-', x+1.5, y+4);
     }
     y += rowH;
   }
-
   y += 1.5;
 
-  // ── SEÇÃO 2: DADOS TÉCNICOS (3 colunas) ──
-  var techData = [
-    ['FOTOVOLTAICO', v('fotovoltaico_gate')],
-    ['TENSÃO DA REDE', tensao],
-    ['LINHA VIVA', linhaVivaVal],
-    ['LIGAÇÃO NOVA FV', v('ligacao_nova_fv')],
-    ['ALTERAÇÃO CARGA FV', v('alteracao_carga_fv')],
-    ['SIGFI ATUAL', v('sigfi_atual')],
-    ['NOVO SIGFI', v('sigfi_alteracao')],
-    ['MOD. ATERRAMENTO', v('modelo_aterramento')],
-    ['OBS. ATERRAMENTO', v('obs_aterramento')],
-    ['FOTOS OBRIGAT.', v('foto_obrigatoria')],
-    ['MANOBRA', v('manobra')],
-    ['BIG JUMPER', v('big_jumper')],
-    ['BT ENERGIZADO', v('bt_energizado')],
-    ['ESTRUTURA IMPEDE LV', v('proj_estrutura_trabalhar')],
-    ['ESTRUTURA CANADENSE', v('estrutura_canadense')],
-    ['FIO CAZ / CABO 06', v('fio_caz')],
-    ['POSTE PODRE', v('poste_podre')],
-    ['CHAVE FACA PROV.', v('cf_provisoria')],
-    ['RISCO EMINENTE', v('risco_eminente')],
-    ['PRAZO EXECUÇÃO', v('prazo_risco')],
-    ['PERÍODO EXECUÇÃO', v('periodo_execucao')],
-    ['TROCAR MEDIDORES', v('trocar_medidores')],
-    ['MEDIDOR LIGADO', v('medidor_ligado')],
-    ['Nº MEDIDOR', v('num_medidor')],
-    ['RETAGUARDA', v('cc_reta_guarda')],
-    ['Nº CLIENTES', v('num_clientes')],
-    ['DISTRIBUIR POSTES', v('distribuir_postes')],
-    ['APOIO DISTRIB.', v('apoio_distribuicao')],
-    ['SINALIZA TRÂNSITO', v('sinaliza_transito')],
-    ['SINAL CELULAR', v('sinal_celular')],
-    ['ACESSO CHUVA', v('acesso_chuva')],
-    ['ACESSO CAMINHÃO', v('acesso_caminhao')],
-    ['PORTEIRA CADEADA', v('porteira_cadeada')],
-    ['NOME DE RUA', v('possui_nome_rua')],
-    ['CAIXA DERIVAÇÃO', v('apoio_caixa')],
-    ['TUBULAÇÃO SUBTERR.', v('apoio_tubulacao')],
-    ['REDE IP', v('verificou_rede_ip')],
-    ['TELEFÔNICA', v('telefonica')],
-    ['FIO DROPS', v('apoio_drops')],
-    ['FIBRA ÓPTICA', v('apoio_fibra')],
-    ['PODA QTD', v('amb_poda_qtd')],
-    ['CORTE QTD', v('amb_corte_qtd')],
-    ['AUT. PODA', v('aut_prop_poda')],
-    ['AUT. CORTE', v('aut_prop_corte')],
-    ['ABERTURA FAIXA', v('amb_abertura_faixa')],
-    ['AUT. PASSAGEM', v('autorizacao_passagem')],
-    ['TRAVESSIA/OCUP.', v('travessia_ocup')],
-    ['FORMULÁRIO OCUP.', v('formular_ocupar')],
-    ['APP', v('amb_app')],
-    ['UNID. CONSERV.', v('amb_unidade_conservacao')],
-    ['LICENÇA AMBIENTAL', v('licenca_ambiental')],
-    ['LOCAL INTERVENÇÃO', v('intervencao_em')],
-    ['TERRENO 3º', v('padrao_terreno_3')],
-    ['ABELHA POSTE', v('abelha_poste')],
-    ['CAVA ROCHA', v('cava_rocha')],
-    ['CAVA PROFUNDA', v('cava_profunda')],
-    ['TUBULAÇÃO GÁS', v('tubulacao_gas')],
-    ['PIQUETE/SPRAY', v('piquetespray')],
-    ['REPARO CALÇADA', v('reparo_calcada')],
-    ['REPARO ESPECIAL', v('reparo_calcada_especial')],
-    ['CERCAS DXF', v('indicado_dxf')],
-    ['ELOS MONT./JUST.', v('efeito_montante_jusante')],
-    ['DESC. CERCAS', v('indicacao_cercas_dxf')],
-    ['SUBST. TRAFO', v('substituir_trafo')],
-    ['SUBST. BARRAMENTO', v('barramento')],
-    ['LIG. CHAVE/PARA-RAIO', v('ligacao_cc_pr')],
-    ['PINTAR CONF/TOMB', v('pintar_conf_tomb')],
-    ['GLV', v('possui_glv')],
-    ['PROTETOR BUCHA', v('instalar_protetor')],
-    ['ADEQUAÇÃO', v('verificado_adequacao')],
-    ['DOAR PADRÃO', v('doar_padrao')],
-  ];
+  if (ehFV) {
+    var ligFV = v('ligacao_nova_fv');
+    var altFV = v('alteracao_carga_fv');
+    var sigfiAt = v('sigfi_atual');
+    var sigfiNo = v('sigfi_alteracao');
 
-  var camposVermelhos = ['LINHA VIVA','ESTRUTURA IMPEDE LV','ESTRUTURA CANADENSE','FIO CAZ / CABO 06','POSTE PODRE','RISCO EMINENTE'];
+    doc.setFillColor(37,99,235); doc.rect(margin,y,utilW,4.5,'F');
+    doc.setTextColor(255,255,255); doc.setFont('helvetica','bold'); doc.setFontSize(6);
+    doc.text('DADOS DO FOTOVOLTAICO',margin+2,y+3);
+    y += 5;
 
-  // Subtítulo
-  doc.setFillColor(37,99,235); doc.rect(margin,y,utilW,5,'F');
-  doc.setTextColor(255,255,255); doc.setFont('helvetica','bold'); doc.setFontSize(7);
-  doc.text('DADOS TÉCNICOS',margin+2,y+3.6);
-  y += 5.5;
-
-  var colW3 = utilW / 3;
-  var rowH3 = 5.8;
-  var camposPorLinha = 3;
-
-  for (var i=0; i<techData.length; i+=camposPorLinha) {
-    var maxH = rowH3;
-    // Verificar se precisa de nova página
-    if (y + maxH > 200) {
-      doc.addPage();
-      y = 8;
-      doc.setFillColor(37,99,235); doc.rect(margin,y,utilW,5,'F');
-      doc.setTextColor(255,255,255); doc.setFont('helvetica','bold'); doc.setFontSize(7);
-      doc.text('DADOS TÉCNICOS (continuação)',margin+2,y+3.6);
-      y += 5.5;
-    }
-    for (var c=0; c<camposPorLinha; c++) {
-      var idx = i + c;
-      if (idx >= techData.length) break;
-      var item = techData[idx];
-      var x = margin + c * colW3;
-      var label = item[0];
-      var value = (item[1] && item[1] !== '') ? item[1] : '-';
-      var txt = label + ': ' + value;
-
-      // Cor de fundo baseada no valor
-      var fillColor = [255,255,255];
-      if (value.toUpperCase() === 'SIM' && camposVermelhos.indexOf(label) >= 0) fillColor = [255,235,235];
-      else if (value.toUpperCase() === 'SIM') fillColor = [240,253,244];
-      else if (value.toUpperCase() === 'NAO' || value.toUpperCase() === 'NÃO') fillColor = [255,242,242];
-
-      doc.setFillColor(fillColor[0], fillColor[1], fillColor[2]);
-      doc.rect(x,y,colW3-0.3,maxH,'F');
-      doc.setDrawColor(210,210,210); doc.rect(x,y,colW3-0.3,maxH,'S');
-      doc.setFont('helvetica','bold'); doc.setFontSize(5.8);
-      if (value.toUpperCase() === 'SIM' && camposVermelhos.indexOf(label) >= 0) doc.setTextColor(180,0,0);
-      else if (value.toUpperCase() === 'SIM') doc.setTextColor(22,163,74);
-      else if (value.toUpperCase() === 'NAO' || value.toUpperCase() === 'NÃO') doc.setTextColor(200,30,30);
-      else doc.setTextColor(37,99,235);
-      doc.text(label, x+1.2, y+2.8);
-      doc.setFont('helvetica','normal'); doc.setFontSize(6.5); doc.setTextColor(15,23,42);
-      var valText = value;
-      if (doc.getStringUnitWidth(valText) * 6.5 / doc.internal.scaleFactor > (colW3-3)) {
-        valText = valText.substring(0,30)+'…';
+    var fvFields = [
+      ['LIGACAO NOVA FV', ligFV],
+      ['ALTERACAO CARGA FV', altFV],
+      ['SIGFI ATUAL', sigfiAt],
+      ['NOVO SIGFI', sigfiNo],
+    ];
+    for (var i=0; i<fvFields.length; i+=2) {
+      for (var c=0; c<2; c++) {
+        var idx = i + c;
+        if (idx >= fvFields.length) break;
+        var item = fvFields[idx];
+        var x = margin + c * colW2;
+        doc.setFillColor(248,250,252); doc.rect(x,y,colW2,rowH,'F');
+        doc.rect(x,y,colW2,rowH,'S');
+        doc.setFont('helvetica','bold'); doc.setFontSize(5.5); doc.setTextColor(37,99,235);
+        doc.text(item[0], x+1.5, y+2);
+        doc.setFont('helvetica','normal'); doc.setFontSize(6.5); doc.setTextColor(15,23,42);
+        doc.text(item[1]||'-', x+1.5, y+4);
       }
-      doc.text(valText, x+1.2, y+5);
+      y += rowH;
     }
-    y += maxH;
+    y += 1.5;
+
+    var pedidoNum = parseInt(sigfiNo) || 0;
+    var atualNum = parseInt(sigfiAt) || 0;
+    var ehLN = ligFV === 'sim' || sigfiAt === 'Ligacao Nova';
+    var moRet = ehLN ? 0 : (MO_RETIRADA[atualNum] || 0);
+    var moInst = MO_INSTALACAO[pedidoNum] || 0;
+    var estrut = ESTRUTURA_NOVA[pedidoNum] || 0;
+    var sistema = SISTEMA_FOTOVOLTAICO[pedidoNum] || 0;
+    var total = moRet + moInst + estrut + sistema;
+
+    doc.setFillColor(217,119,6); doc.rect(margin,y,utilW,4.5,'F');
+    doc.setTextColor(255,255,255); doc.setFont('helvetica','bold'); doc.setFontSize(6);
+    doc.text('ORCAMENTO SIGFI',margin+2,y+3);
+    y += 5;
+
+    var orcRows = [
+      ['MO Retirada de estrutura', ehLN ? '---' : formatarMoedaBR(moRet)],
+      ['MO Instalacao do sistema', formatarMoedaBR(moInst)],
+      ['Estrutura Nova (material)', formatarMoedaBR(estrut)],
+      ['Sistema Fotovoltaico', formatarMoedaBR(sistema)],
+    ];
+    for (var i=0; i<orcRows.length; i+=2) {
+      for (var c=0; c<2; c++) {
+        var idx = i + c;
+        if (idx >= orcRows.length) break;
+        var item = orcRows[idx];
+        var x = margin + c * colW2;
+        doc.setFillColor(255,255,255); doc.rect(x,y,colW2,rowH,'F');
+        doc.setDrawColor(200,200,200); doc.rect(x,y,colW2,rowH,'S');
+        doc.setFont('helvetica','bold'); doc.setFontSize(5.5); doc.setTextColor(100,60,0);
+        doc.text(item[0], x+1.5, y+2);
+        doc.setFont('helvetica','normal'); doc.setFontSize(6.5); doc.setTextColor(15,23,42);
+        doc.text(item[1], x+1.5, y+4);
+      }
+      y += rowH;
+    }
+    var totalRowH = 7;
+    var semCusto = ehLN || BASE_SIGFI_PU.includes(pedidoNum);
+    if (semCusto) {
+      doc.setFillColor(240,253,244); doc.rect(margin,y,utilW,totalRowH,'F');
+      doc.setDrawColor(22,163,74); doc.rect(margin,y,utilW,totalRowH,'S');
+      doc.setFont('helvetica','bold'); doc.setFontSize(7); doc.setTextColor(22,163,74);
+      doc.text('TOTAL - SEM CUSTO AO CLIENTE: ' + formatarMoedaBR(total), margin+3, y+4.8);
+    } else {
+      doc.setFillColor(255,242,242); doc.rect(margin,y,utilW,totalRowH,'F');
+      doc.setDrawColor(220,38,38); doc.rect(margin,y,utilW,totalRowH,'S');
+      doc.setFont('helvetica','bold'); doc.setFontSize(7); doc.setTextColor(220,38,38);
+      doc.text('TOTAL - COM CUSTO AO CLIENTE: ' + formatarMoedaBR(total), margin+3, y+4.8);
+    }
+
+    y += totalRowH + 1.5;
+  } else {
+    // ── FV=NAO: DADOS TECNICOS COMPLETOS (4 colunas) ──
+    var techData = [
+      ['TENSAO REDE', tensao],
+      ['LINHA VIVA', linhaVivaVal],
+      ['MOD. ATERRAMENTO', v('modelo_aterramento')],
+      ['OBS. ATERR.', v('obs_aterramento')],
+      ['FOTOS OBRIG.', v('foto_obrigatoria')],
+      ['MANOBRA', v('manobra')],
+      ['BIG JUMPER', v('big_jumper')],
+      ['BT ENERGIZADO', v('bt_energizado')],
+      ['ESTRUT. IMPEDE LV', v('proj_estrutura_trabalhar')],
+      ['ESTRUT. CANADENSE', v('estrutura_canadense')],
+      ['FIO CAZ/CABO 06', v('fio_caz')],
+      ['POSTE PODRE', v('poste_podre')],
+      ['CHAVE FACA PROV.', v('cf_provisoria')],
+      ['RISCO EMINENTE', v('risco_eminente')],
+      ['PRAZO RISCO', v('prazo_risco')],
+      ['PERIODO EXEC.', v('periodo_execucao')],
+      ['TROCAR MEDID.', v('trocar_medidores')],
+      ['MEDIDOR LIGADO', v('medidor_ligado')],
+      ['N. MEDIDOR', v('num_medidor')],
+      ['RETAGUARDA', v('cc_reta_guarda')],
+      ['N. CLIENTES', v('num_clientes')],
+      ['DISTRIB. POSTES', v('distribuir_postes')],
+      ['APOIO DISTRIB.', v('apoio_distribuicao')],
+      ['SINAL. TRANSITO', v('sinaliza_transito')],
+      ['SINAL CELULAR', v('sinal_celular')],
+      ['ACESSO CHUVA', v('acesso_chuva')],
+      ['ACESSO CAMINHAO', v('acesso_caminhao')],
+      ['PORTEIRA CADEADA', v('porteira_cadeada')],
+      ['NOME DE RUA', v('possui_nome_rua')],
+      ['CAIXA DERIVACAO', v('apoio_caixa')],
+      ['TUBUL. SUBTERR.', v('apoio_tubulacao')],
+      ['REDE IP', v('verificou_rede_ip')],
+      ['TELEFONICA', v('telefonica')],
+      ['FIO DROPS', v('apoio_drops')],
+      ['FIBRA OTICA', v('apoio_fibra')],
+      ['PODA QTD', v('amb_poda_qtd')],
+      ['CORTE QTD', v('amb_corte_qtd')],
+      ['AUT. PODA', v('aut_prop_poda')],
+      ['AUT. CORTE', v('aut_prop_corte')],
+      ['ABERT. FAIXA', v('amb_abertura_faixa')],
+      ['AUT. PASSAGEM', v('autorizacao_passagem')],
+      ['TRAVESSIA/OCUP', v('travessia_ocup')],
+      ['FORM. OCUPACAO', v('formular_ocupar')],
+      ['APP', v('amb_app')],
+      ['UNID. CONSERV.', v('amb_unidade_conservacao')],
+      ['LIC. AMBIENTAL', v('licenca_ambiental')],
+      ['LOCAL INTERV.', v('intervencao_em')],
+      ['TERRENO 3', v('padrao_terreno_3')],
+      ['ABELHA POSTE', v('abelha_poste')],
+      ['CAVA ROCHA', v('cava_rocha')],
+      ['CAVA PROFUNDA', v('cava_profunda')],
+      ['TUBUL. GAS', v('tubulacao_gas')],
+      ['PIQUETE/SPRAY', v('piquetespray')],
+      ['REPARO CALCADA', v('reparo_calcada')],
+      ['REP. CALC. ESP.', v('reparo_calcada_especial')],
+      ['CERCAS DXF', v('indicado_dxf')],
+      ['ELOS MONT/JUST', v('efeito_montante_jusante')],
+      ['DESC. CERCAS', v('indicacao_cercas_dxf')],
+      ['SUBST. TRAFO', v('substituir_trafo')],
+      ['SUBST. BARRAM.', v('barramento')],
+      ['LIG. CHAVE/PARAR', v('ligacao_cc_pr')],
+      ['PINTAR CONF/TOMB', v('pintar_conf_tomb')],
+      ['GLV', v('possui_glv')],
+      ['PROTETOR BUCHA', v('instalar_protetor')],
+      ['ADEQUACAO', v('verificado_adequacao')],
+      ['DOAR PADRAO', v('doar_padrao')],
+    ];
+
+    var camposVermelhos = ['LINHA VIVA','ESTRUT. IMPEDE LV','ESTRUT. CANADENSE','FIO CAZ/CABO 06','POSTE PODRE','RISCO EMINENTE'];
+
+    doc.setFillColor(37,99,235); doc.rect(margin,y,utilW,4,'F');
+    doc.setTextColor(255,255,255); doc.setFont('helvetica','bold'); doc.setFontSize(6);
+    doc.text('DADOS TECNICOS',margin+2,y+2.8);
+    y += 4.5;
+
+    var colW4 = utilW / 4;
+    var rowH4 = 5;
+    var cols = 4;
+
+    for (var i=0; i<techData.length; i+=cols) {
+      if (y + rowH4 > 202) break;
+      for (var c=0; c<cols; c++) {
+        var idx = i + c;
+        if (idx >= techData.length) break;
+        var item = techData[idx];
+        var x = margin + c * colW4;
+        var label = item[0];
+        var value = (item[1] && item[1] !== '') ? item[1] : '-';
+
+        var fillColor = [255,255,255];
+        if (value.toUpperCase() === 'SIM' && camposVermelhos.indexOf(label) >= 0) fillColor = [255,235,235];
+        else if (value.toUpperCase() === 'SIM') fillColor = [240,253,244];
+        else if (value.toUpperCase() === 'NAO' || value.toUpperCase() === 'NAO') fillColor = [255,242,242];
+
+        doc.setFillColor(fillColor[0], fillColor[1], fillColor[2]);
+        doc.rect(x,y,colW4-0.3,rowH4,'F');
+        doc.setDrawColor(210,210,210); doc.rect(x,y,colW4-0.3,rowH4,'S');
+        doc.setFont('helvetica','bold'); doc.setFontSize(4.8);
+        if (value.toUpperCase() === 'SIM' && camposVermelhos.indexOf(label) >= 0) doc.setTextColor(180,0,0);
+        else if (value.toUpperCase() === 'SIM') doc.setTextColor(22,163,74);
+        else if (value.toUpperCase() === 'NAO' || value.toUpperCase() === 'NAO') doc.setTextColor(200,30,30);
+        else doc.setTextColor(37,99,235);
+        doc.text(label, x+1, y+2.2);
+        doc.setFont('helvetica','normal'); doc.setFontSize(5.2); doc.setTextColor(15,23,42);
+        doc.text(value, x+1, y+4);
+      }
+      y += rowH4;
+    }
+    y += 1;
+
+    // Anotacoes
+    var altRest = pgH - margin - y - 6;
+    if (altRest > 8) {
+      doc.setFillColor(22,101,52); doc.rect(margin,y,utilW,4,'F');
+      doc.setTextColor(255,255,255); doc.setFont('helvetica','bold'); doc.setFontSize(6);
+      doc.text('ANOTACOES GERAIS',margin+2,y+2.8);
+      y += 4.5;
+      var altAnot = pgH - margin - y - 6;
+      if (altAnot > 5) {
+        doc.setFillColor(255,255,255); doc.setDrawColor(180,180,180); doc.setLineWidth(0.2);
+        doc.rect(margin,y,utilW,altAnot,'FD');
+        doc.setFont('helvetica','normal'); doc.setFontSize(5.5); doc.setTextColor(30,30,30);
+        var textoNota = (anotacoes && anotacoes!=='-') ? anotacoes : '(sem anotacoes)';
+        var linhasNota = doc.splitTextToSize(textoNota, utilW-8);
+        doc.text(linhasNota, margin+3, y+3);
+      }
+    }
   }
 
-  y += 2;
-
-  // ── SEÇÃO 3: ANOTAÇÕES ──
-  if (y + 30 > 200) { doc.addPage(); y = 8; }
-  doc.setFillColor(22,101,52); doc.rect(margin,y,utilW,5,'F');
-  doc.setTextColor(255,255,255); doc.setFont('helvetica','bold'); doc.setFontSize(7);
-  doc.text('ANOTAÇÕES GERAIS',margin+2,y+3.6);
-  y += 5.5;
-  var altAnot = 202 - y;
-  doc.setFillColor(255,255,255); doc.setDrawColor(180,180,180); doc.setLineWidth(0.3);
-  doc.rect(margin,y,utilW,altAnot,'FD');
-  doc.setFont('helvetica','normal'); doc.setFontSize(7); doc.setTextColor(30,30,30);
-  var textoNota = (anotacoes && anotacoes!=='-') ? anotacoes : '(sem anotações)';
-  var linhasNota = doc.splitTextToSize(textoNota, utilW-10);
-  doc.text(linhasNota, margin+3, y+4.5);
-
-  // RODAPÉ EM TODAS AS PÁGINAS
-  var totalPags = doc.getNumberOfPages();
-  for (var p=1; p<=totalPags; p++) {
-    doc.setPage(p);
-    doc.setFontSize(6.5); doc.setTextColor(150,150,150); doc.setFont('helvetica','normal');
-    doc.text('Documento Interno EKT · Pág. '+p+'/'+totalPags,pgW/2,207,{align:'center'});
-    if (lv) {
-      doc.setFillColor(220,38,38); doc.rect(238,198,55,10,'F');
-      doc.setFontSize(7.5); doc.setFont('helvetica','bold'); doc.setTextColor(255,255,255);
-      doc.text('⚠ LINHA VIVA',265.5,205,{align:'center'});
-    }
+  // RODAPE
+  doc.setFontSize(5.5); doc.setTextColor(150,150,150);
+  doc.text('Documento Interno EKT - Pag. 1/1',pgW/2,pgH-3,{align:'center'});
+  if (lv) {
+    doc.setFillColor(220,38,38); doc.rect(236,pgH-15,55,8,'F');
+    doc.setFontSize(6); doc.setFont('helvetica','bold'); doc.setTextColor(255,255,255);
+    doc.text('! LINHA VIVA',263.5,pgH-9.5,{align:'center'});
   }
 
   doc.save('Viabilidade_'+(v('codigo_projeto')!=='-'?v('codigo_projeto'):'EKT')+'.pdf');
