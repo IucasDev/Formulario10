@@ -1,0 +1,60 @@
+Preciso compactar esse programa para que libere as perguntas de acordo com os assuntos o cara da ti falou que ele esta muito grande tem que compactar mas manter as perguntas e a calculadora que esta imbutida  ele quer que dependendo das respostas do usuario ele vai abrindo os campos para responder as outras por exemplo, se for um pedido de fotovoltaico e o usuario responder nao, entao nao mostra as perguntas sobre fotovoltaico mas primeiro os dados do cliente e projetista e tudo que esta no inicio tem que aparecer exemplo  isso tem que aparecer no inicio: 
+Nome do Cliente
+Código do Projeto
+Telefone do Cliente
+Data
+Projetista 1
+Telefone Projetista 1
+Projetista 2
+Telefone Projetista 2 
+tudo com suas respectivas funcoes que vc ja fez.
+depois vem a pergunta: É um pedido de fotovoltaico?
+ai vc usa a regra que te falei, se responder sim, libera o conjunto do fotovoltaico, com a calculadora e a tabela tambem. e apos isso mostre os botoes de salvamento, pdf, jpg, novo e ver salvos conforme layout ja pronto se a resposta for nao, vc seguira com o formulario conforme as instrucoes abaixo que vou descrever.  apos, entao pergunta se a tensao da rede é 34,5 ou 13.8
+se sim prossiga para pergunta sera em regime de linha viva? se a resposta for nao ou sim  deixara marcado que sera em linha viva no formulario e  libere os blocos do:
+Modelo Aterramento Primário Conforme OT-OPE-008 Selecionar... A A — Alternativo B — Linear B — Cruz C D Poço Profundo
+Observações (Aterramento)
+⚡ Linha Viva · Riscos · Fotos
+Fotos (Obrigatório — salvas na pasta conforme ponto DXF)?
+SIM
+🔧 Campo
+Manobra?
+SIMNÃO
+Big Jumper?
+SIMNÃO
+BT Energizado?
+SIMNÃO
+⚡ Linha Viva? ATENÇÃO
+SIMNÃO
+Projeto possui estrutura onde a Linha-Viva Não Consiga Trabalhar?
+SIMNÃO
+Estrutura Canadense?
+SIMNÃO
+Projeto envolve Fio 06 de cobre/alumínio ou cabo CAZ?
+SIMNÃO
+Poste Podre?
+SIMNÃO
+CHAVE FACA Provisória?
+SIMNÃO
+⚠️ Risco Eminente
+Existe Risco Eminente no Local?
+SIMNÃO
+Qual o Melhor Prazo para Execução da obra caso haja risco?
+30 dias45 dias60 dias🚨 Urgente
+apos isso pregunte Período de Execução  e libere seu bloco de escolhas conforme ja esta no codigo, lembrese que vamos usar os mesmos conteudos do formulario porem liberando conforme as respostas
+ pregunte os blocos da Ambiental :
+Abertura de Faixa?
+Poda de Árvore — Quantidade
+Corte de Árvore — Quantidade
+Aut. Proprietário — Poda?
+SIMNÃO
+Aut. Proprietário — Corte?
+ na parte de Intervencao, mostre essas preguntas se   o usuario escolher Pergunte assim: O projeto se trata de::Padrão em Terreno de 3º? Autorização de Passagem?  Travessia / Ocupação?  Formulário de Ocupação?  APP — Área Preservação Permanente?  Unidade de Conservação?  Licença Ambiental?  e deixe um lugar para ele escolhersim ou nao se for sim libere as perguntas que falei acima, sobree intervencao.
+ siga com o bloco de logistica 
+depois o bloco do chec list
+depois 📐 Projeto & Diversos
+depois  🔨 Executar Obra,,, retire essa pergunta e irrelevante: Sinalizou Dist. Circuitos?
+depois  Atenção
+depois 📝 Anotações Gerais
+ e mostre os botoes de salvamento, pdf, novo, salvos, jpg
+
+retire essa pergunta: Sinalizou Dist. Circuitos?
