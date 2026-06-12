@@ -1,0 +1,85 @@
+id;nome_campo;tipo;descricao;obrigatorio;secao
+1;nome_cliente;VARCHAR(255);Nome do cliente;Sim;Identificacao
+2;codigo_projeto;VARCHAR(50);Codigo EKT do projeto;Sim;Identificacao
+3;ddd_cliente;VARCHAR(2);DDD do telefone do cliente;Nao;Identificacao
+4;telefone_cliente;VARCHAR(9);Telefone do cliente;Nao;Identificacao
+5;data;DATE;Data do preenchimento;Nao;Identificacao
+6;projetista1;VARCHAR(255);Nome do projetista 1;Nao;Identificacao
+7;ddd_projetista;VARCHAR(2);DDD projetista 1;Nao;Identificacao
+8;telefone_projetista;VARCHAR(9);Telefone projetista 1;Nao;Identificacao
+9;projetista2;VARCHAR(255);Nome do projetista 2;Nao;Identificacao
+10;ddd_projetista2;VARCHAR(2);DDD projetista 2;Nao;Identificacao
+11;telefone_projetista2;VARCHAR(9);Telefone projetista 2;Nao;Identificacao
+12;fotovoltaico_gate;CHAR(3);Eh pedido de fotovoltaico? (sim/nao);Sim;Gate_FV
+13;ligacao_nova_fv;CHAR(3);Ligacao nova fotovoltaica? (sim/nao/na);Condicional;Fotovoltaico
+14;alteracao_carga_fv;CHAR(3);Alteracao de carga FV? (sim/nao/na);Condicional;Fotovoltaico
+15;sigfi_atual;VARCHAR(20);SIGFI atual;Condicional;Fotovoltaico
+16;sigfi_alteracao;VARCHAR(20);Novo SIGFI;Condicional;Fotovoltaico
+17;tensao_345_chk;CHAR(3);Tensao 34,5kV (sim/'');Condicional;Nao_FV
+18;tensao_138_chk;CHAR(3);Tensao 13,8kV (sim/'');Condicional;Nao_FV
+19;linha_viva;CHAR(3);Regime de linha viva? (sim/nao);Condicional;Nao_FV
+20;modelo_aterramento;VARCHAR(30);Modelo de aterramento OT-OPE-008;Condicional;Nao_FV
+21;obs_aterramento;TEXT;Observacoes sobre aterramento;Nao;Nao_FV
+22;foto_obrigatoria;CHAR(3);Fotos obrigatorias? (sim);Condicional;Nao_FV
+23;manobra;CHAR(3);Manobra? (sim/nao);Condicional;Nao_FV
+24;big_jumper;CHAR(3);Big Jumper? (sim/nao);Condicional;Nao_FV
+25;bt_energizado;CHAR(3);BT Energizado? (sim/nao);Condicional;Nao_FV
+26;linha_viva_confirm;CHAR(3);Linha Viva confirmada? (sim/nao);Condicional;Nao_FV
+27;proj_estrutura_trabalhar;CHAR(3);Estrutura impede LV? (sim/nao);Condicional;Nao_FV
+28;estrutura_canadense;CHAR(3);Estrutura canadense? (sim/nao);Condicional;Nao_FV
+29;fio_caz;CHAR(3);Fio 06 ou cabo CAZ? (sim/nao);Condicional;Nao_FV
+30;poste_podre;CHAR(3);Poste podre? (sim/nao);Condicional;Nao_FV
+31;cf_provisoria;CHAR(3);Chave faca provisoria? (sim/nao);Condicional;Nao_FV
+32;risco_eminente;CHAR(3);Risco eminente no local? (sim/nao);Condicional;Nao_FV
+33;prazo_risco;VARCHAR(15);Prazo para execucao (30 dias/45 dias/60 dias/Urgente/N/A);Condicional;Nao_FV
+34;periodo_execucao;VARCHAR(15);Periodo execucao (semana/fimsemana/indiferente);Condicional;Nao_FV
+35;amb_abertura_faixa;CHAR(3);Abertura de faixa? (sim/nao);Condicional;Ambiental
+36;amb_poda_qtd;INTEGER;Quantidade de podas;Nao;Ambiental
+37;amb_corte_qtd;INTEGER;Quantidade de cortes;Nao;Ambiental
+38;aut_prop_poda;CHAR(3);Autorizacao proprietario para poda? (sim/nao);Condicional;Ambiental
+39;aut_prop_corte;CHAR(3);Autorizacao proprietario para corte? (sim/nao);Condicional;Ambiental
+40;padrao_terreno_3;CHAR(3);Padrao em terreno de 3? (sim/nao);Condicional;Ambiental
+41;autorizacao_passagem;CHAR(3);Autorizacao de passagem? (sim/nao);Condicional;Ambiental
+42;travessia_ocup;CHAR(3);Travessia/ocupacao? (sim/nao);Condicional;Ambiental
+43;formular_ocupar;CHAR(3);Formulario de ocupacao? (sim/nao);Condicional;Ambiental
+44;amb_app;CHAR(3);APP - Area Preservacao Permanente? (sim/nao);Condicional;Ambiental
+45;amb_unidade_conservacao;CHAR(3);Unidade de conservacao? (sim/nao);Condicional;Ambiental
+46;licenca_ambiental;CHAR(3);Licenca ambiental? (sim/nao);Condicional;Ambiental
+47;intervencao_em;TEXT;Descricao do local da intervencao;Nao;Local_Intervencao
+48;distribuir_postes;CHAR(3);Distribuir postes no dia? (sim/nao);Condicional;Logistica
+49;apoio_distribuicao;CHAR(3);Apoio na distribuicao? (sim/nao);Condicional;Logistica
+50;sinaliza_transito;CHAR(3);Sinaliza transito? (sim/nao);Condicional;Logistica
+51;sinal_celular;CHAR(3);Sinal celular? (sim/nao);Condicional;Logistica
+52;acesso_chuva;CHAR(3);Acesso com chuva? (sim/nao);Condicional;Logistica
+53;acesso_caminhao;CHAR(3);Acesso caminhao? (sim/nao);Condicional;Logistica
+54;porteira_cadeada;CHAR(3);Porteira cadeada? (sim/nao);Condicional;Logistica
+55;possui_nome_rua;CHAR(3);Possui nome de rua? (sim/nao);Condicional;Logistica
+56;abelha_poste;CHAR(3);Abelha no poste? (sim/nao);Condicional;Checklist
+57;cava_rocha;CHAR(3);Cava em rocha? (sim/nao);Condicional;Checklist
+58;cava_profunda;CHAR(3);Cava profunda? (sim/nao);Condicional;Checklist
+59;tubulacao_gas;CHAR(3);Tubulacao de gas? (sim/nao);Condicional;Checklist
+60;piquetespray;CHAR(3);Piquete/spray? (sim/nao);Condicional;Checklist
+61;reparo_calcada;CHAR(3);Reparo de calcada? (sim/nao);Condicional;Checklist
+62;reparo_calcada_especial;CHAR(3);Reparo calcada especial? (sim/nao);Condicional;Checklist
+63;indicado_dxf;CHAR(3);Indicado cercas no DXF? (sim/nao);Condicional;Checklist
+64;efeito_montante_jusante;CHAR(3);Adequacao elos montante/jusante? (sim/nao/na);Condicional;Checklist
+65;substituir_trafo;CHAR(3);Substituir transformador? (sim/nao);Condicional;Projeto
+66;barramento;CHAR(3);Substituir barramento? (sim/nao);Condicional;Projeto
+67;ligacao_cc_pr;CHAR(3);Substituir ligacao chave/para-raio? (sim/nao);Condicional;Projeto
+68;pintar_conf_tomb;CHAR(3);Pintar conf/tomb? (sim/nao);Condicional;Projeto
+69;possui_glv;CHAR(3);Possui GLV? (sim/nao);Condicional;Projeto
+70;instalar_protetor;CHAR(3);Instalar protetor de bucha? (sim/nao);Condicional;Projeto
+71;verificado_adequacao;CHAR(3);Verificado adequacao? (sim/nao);Condicional;Projeto
+72;doar_padrao;CHAR(3);Doar padrao? (sim/nao);Condicional;Projeto
+73;trocar_medidores;CHAR(3);Trocar medidores 240V? (sim/nao);Condicional;Executar_Obra
+74;medidor_ligado;CHAR(3);Medidor ja ligado? (sim/nao);Condicional;Executar_Obra
+75;num_medidor;VARCHAR(50);Numero do medidor ja ligado;Nao;Executar_Obra
+76;cc_reta_guarda;VARCHAR(50);Confiabilidade RetaGuarda;Nao;Executar_Obra
+77;num_clientes;INTEGER;Numero de clientes;Nao;Executar_Obra
+78;apoio_caixa;CHAR(3);Caixa de derivacao? (sim/nao);Condicional;Atencao
+79;apoio_tubulacao;CHAR(3);Tubulacao subterranea? (sim/nao);Condicional;Atencao
+80;verificou_rede_ip;CHAR(3);Verificou rede IP? (sim/nao);Condicional;Atencao
+81;telefonica;CHAR(3);Telefonica? (sim/nao);Condicional;Atencao
+82;apoio_drops;CHAR(3);Fio drops? (sim/nao);Condicional;Atencao
+83;apoio_fibra;CHAR(3);Fibra optica? (sim/nao);Condicional;Atencao
+84;anotacoes;TEXT;Observacoes gerais;Nao;Anotacoes

@@ -390,7 +390,7 @@ input[type="time"]::-webkit-calendar-picker-indicator{cursor:pointer;filter:opac
     <div id="sub-pos-lv" class="progressive-section hidden">
 
       <!-- ATERRAMENTO -->
-      <div class="card">
+      <div class="card progressive-section hidden" id="sub-aterramento">
         <div class="ch">⛓️ Aterramento</div>
         <div class="cb">
           <div class="grid-2">
@@ -398,6 +398,7 @@ input[type="time"]::-webkit-calendar-picker-indicator{cursor:pointer;filter:opac
               <label class="cl">Modelo Aterramento Primário Conforme OT-OPE-008</label>
               <select class="cs" name="modelo_aterramento">
                 <option value="">Selecionar...</option>
+                <option value="nao_se_aplica">Não se Aplica</option>
                 <option value="A">A</option>
                 <option value="A_alternativo">A — Alternativo</option>
                 <option value="B_Linear">B — Linear</option>
@@ -415,9 +416,9 @@ input[type="time"]::-webkit-calendar-picker-indicator{cursor:pointer;filter:opac
         </div>
       </div>
 
-      <!-- LINHA VIVA · RISCOS · FOTOS -->
-      <div class="card">
-        <div class="ch" style="background:#fef2f2;color:#dc2626;border-bottom-color:#fecaca">⚡ Linha Viva · Riscos · Fotos</div>
+      <!-- LV CAMPO (Fotos + Campo até Chave Faca) -->
+      <div class="card progressive-section hidden" id="sub-lv-campo">
+        <div class="ch" style="background:#fef2f2;color:#dc2626;border-bottom-color:#fecaca">⚡ Linha Viva · Campo</div>
         <div class="cb">
 
           <div id="lv-confirmed-badge" class="progressive-section hidden" style="margin-bottom:4px">
@@ -497,8 +498,13 @@ input[type="time"]::-webkit-calendar-picker-indicator{cursor:pointer;filter:opac
               </div>
             </div>
           </div>
-          <hr class="sep">
-          <div class="ch-sub">⚠️ Risco Eminente</div>
+        </div>
+      </div>
+
+      <!-- RISCO EMINENTE + PERÍODO -->
+      <div class="card progressive-section hidden" id="sub-risco-periodo">
+        <div class="ch" style="background:#fef2f2;color:#dc2626;border-bottom-color:#fecaca">⚠️ Risco Eminente</div>
+        <div class="cb">
           <div class="csn">
             <span class="cl">Existe Risco Eminente no Local?</span>
             <div class="snb">
@@ -513,16 +519,11 @@ input[type="time"]::-webkit-calendar-picker-indicator{cursor:pointer;filter:opac
               <input type="radio" name="prazo_risco" id="pr45" value="45 dias"><label for="pr45">45 dias</label>
               <input type="radio" name="prazo_risco" id="pr60" value="60 dias"><label for="pr60">60 dias</label>
               <input type="radio" name="prazo_risco" id="prurg" value="Urgente"><label for="prurg">🚨 Urgente</label>
+              <input type="radio" name="prazo_risco" id="prna" value="N/A"><label for="prna">N/A</label>
             </div>
           </div>
-
-        </div>
-      </div>
-
-      <!-- PERÍODO DE EXECUÇÃO -->
-      <div class="card">
-        <div class="ch">📅 Período de Execução</div>
-        <div class="cb">
+          <hr class="sep" style="margin-top:6px">
+          <div class="ch-sub" style="margin-top:2px">📅 Período de Execução</div>
           <div class="csn">
             <span class="cl">Período de Execução</span>
             <div class="snb periodo-toggle" style="flex-wrap:wrap;gap:6px;">
@@ -536,7 +537,7 @@ input[type="time"]::-webkit-calendar-picker-indicator{cursor:pointer;filter:opac
       </div>
 
       <!-- AMBIENTAL -->
-      <div class="card">
+      <div class="card progressive-section hidden" id="sub-ambiental">
         <div class="ch">🌿 Ambiental</div>
         <div class="cb">
           <div class="csn">
@@ -628,20 +629,22 @@ input[type="time"]::-webkit-calendar-picker-indicator{cursor:pointer;filter:opac
               </div>
             </div>
           </div>
+        </div>
+      </div>
 
-          <div id="section-intervencao-details" class="progressive-section hidden" style="margin-top:6px">
-            <hr class="sep">
-            <div class="ch-sub">📍 Detalhes da Intervenção</div>
-            <div class="cg" style="margin-top:4px">
-              <label class="cl">Local da Intervenção (descrição)</label>
-              <input class="ci" type="text" name="intervencao_em" placeholder="Descreva o local...">
-            </div>
+      <!-- LOCAL DA INTERVENÇÃO -->
+      <div class="card progressive-section hidden" id="sub-local-intervencao">
+        <div class="ch">📍 Local da Intervenção</div>
+        <div class="cb">
+          <div class="cg">
+            <label class="cl">Local da Intervenção (descrição)</label>
+            <input class="ci" type="text" name="intervencao_em" placeholder="Descreva o local...">
           </div>
         </div>
       </div>
 
       <!-- LOGÍSTICA -->
-      <div class="card">
+      <div class="card progressive-section hidden" id="sub-logistica">
         <div class="ch">🚚 Logística</div>
         <div class="cb">
           <div class="grid-2">
@@ -706,7 +709,7 @@ input[type="time"]::-webkit-calendar-picker-indicator{cursor:pointer;filter:opac
       </div>
 
       <!-- CHECKLIST -->
-      <div class="card">
+      <div class="card progressive-section hidden" id="sub-checklist">
         <div class="ch">✅ Checklist</div>
         <div class="cb">
           <div class="grid-2">
@@ -774,16 +777,12 @@ input[type="time"]::-webkit-calendar-picker-indicator{cursor:pointer;filter:opac
                 <input type="radio" name="efeito_montante_jusante" id="emj_na" value="na"><label for="emj_na" class="lna">N/A</label>
               </div>
             </div>
-            <div class="cg">
-              <label class="cl">Indicação Cercas e Qtd. no DXF</label>
-              <input class="ci" type="text" name="indicacao_cercas_dxf" placeholder="Descrever...">
-            </div>
           </div>
         </div>
       </div>
 
       <!-- PROJETO & DIVERSOS -->
-      <div class="card">
+      <div class="card progressive-section hidden" id="sub-projeto">
         <div class="ch">📐 Projeto & Diversos</div>
         <div class="cb">
           <div class="ch-sub">🔧 Transformador / Equipamentos</div>
@@ -848,8 +847,8 @@ input[type="time"]::-webkit-calendar-picker-indicator{cursor:pointer;filter:opac
         </div>
       </div>
 
-      <!-- EXECUTAR OBRA (SINALIZOU DIST. CIRCUITOS REMOVIDO) -->
-      <div class="card">
+      <!-- EXECUTAR OBRA -->
+      <div class="card progressive-section hidden" id="sub-executar">
         <div class="ch">🔨 Executar Obra</div>
         <div class="cb">
           <div class="grid-2">
@@ -884,7 +883,7 @@ input[type="time"]::-webkit-calendar-picker-indicator{cursor:pointer;filter:opac
       </div>
 
       <!-- ATENÇÃO -->
-      <div class="card">
+      <div class="card progressive-section hidden" id="sub-atencao">
         <div class="ch" style="background:#fef2f2;color:#dc2626;border-bottom-color:#fecaca">⚠️ Atenção</div>
         <div class="cb">
           <div class="grid-2">
@@ -935,7 +934,7 @@ input[type="time"]::-webkit-calendar-picker-indicator{cursor:pointer;filter:opac
       </div>
 
       <!-- ANOTAÇÕES GERAIS -->
-      <div class="card">
+      <div class="card progressive-section hidden" id="sub-anotacoes">
         <div class="ch">📝 Anotações Gerais</div>
         <div class="cb">
           <div class="cg">
@@ -953,7 +952,7 @@ input[type="time"]::-webkit-calendar-picker-indicator{cursor:pointer;filter:opac
 </div><!-- /wrap -->
 
 <!-- BARRA DE AÇÕES -->
-<div class="bar">
+<div class="bar progressive-section hidden" id="action-bar">
   <span style="font-size:.7rem;color:var(--t4);font-family:var(--mono)">EKT-FRG-EXE-001</span>
   <div class="bar-sp"></div>
   <button class="btn btn-cz" onclick="novoFormulario()">🆕 Novo</button>
@@ -1070,80 +1069,214 @@ function ocultarSecao(id) {
   el.classList.remove('showing');
 }
 
+// ── HELPER: verifica se todos os radios de um container foram respondidos ──
+function radiosCompletos(container) {
+  if (!container) return false;
+  var grupos = {};
+  container.querySelectorAll('input[type=radio]').forEach(function(r) {
+    if (!grupos[r.name]) grupos[r.name] = false;
+    if (r.checked) grupos[r.name] = true;
+  });
+  var chaves = Object.keys(grupos);
+  return chaves.length > 0 && chaves.every(function(k) { return grupos[k]; });
+}
+
+function secaoCompleta(id) {
+  var el = document.getElementById(id);
+  return el && radiosCompletos(el.querySelector('.cb'));
+}
+
 function verificarProgressao() {
   var fvGate = document.querySelector('input[name="fotovoltaico_gate"]:checked');
   var fvValue = fvGate ? fvGate.value : '';
 
-  // FV=SIM → mostra FV content, esconde não-FV
   if (fvValue === 'sim') {
     mostrarSecao('section-fv-content');
     ocultarSecao('section-nao-fv');
+    mostrarActionBar();
     triggerCalcVisibility();
     return;
   }
 
-  // FV=NÃO → esconde FV content, mostra não-FV (progressivamente)
   if (fvValue === 'nao') {
     ocultarSecao('section-fv-content');
     mostrarSecao('section-nao-fv');
 
-    // Tensão respondida?
+    // Tensão
     var tensao345 = document.getElementById('tensao_345_chk').checked;
     var tensao138 = document.getElementById('tensao_138_chk').checked;
-    if (tensao345 || tensao138) {
-      mostrarSecao('sub-lv-gate');
-
-      // LV gate respondida?
-      var lvGate = document.querySelector('input[name="linha_viva"]:checked');
-      if (lvGate) {
-        mostrarSecao('sub-pos-lv');
-
-        // Mostrar badge LV confirmada se SIM
-        var lvBadge = document.getElementById('lv-confirmed-badge');
-        if (lvGate.value === 'sim') {
-          mostrarSecao('lv-confirmed-badge');
-        } else {
-          ocultarSecao('lv-confirmed-badge');
-        }
-
-        // Sincronizar campo linha_viva_confirm com linha_viva
-        var lvConfirm = document.querySelector('input[name="linha_viva_confirm"][value="' + lvGate.value + '"]');
-        if (lvConfirm && !lvConfirm.checked) lvConfirm.checked = true;
-      } else {
-        ocultarSecao('sub-pos-lv');
-      }
-    } else {
+    if (!tensao345 && !tensao138) {
       ocultarSecao('sub-lv-gate');
       ocultarSecao('sub-pos-lv');
+      return;
     }
+    mostrarSecao('sub-lv-gate');
+
+    // LV gate
+    var lvGate = document.querySelector('input[name="linha_viva"]:checked');
+    if (!lvGate) {
+      ocultarSecao('sub-pos-lv');
+      return;
+    }
+    mostrarSecao('sub-pos-lv');
+
+    var lvBadge = document.getElementById('lv-confirmed-badge');
+    if (lvGate.value === 'sim') { mostrarSecao('lv-confirmed-badge'); }
+    else { ocultarSecao('lv-confirmed-badge'); }
+
+    var lvConfirm = document.querySelector('input[name="linha_viva_confirm"][value="' + lvGate.value + '"]');
+    if (lvConfirm && !lvConfirm.checked) lvConfirm.checked = true;
+
+    // ── PROGRESSÃO DOS BLOCOS ──
+    // 1. Aterramento (mostra quando LV gate respondida)
+    mostrarSecao('sub-aterramento');
+
+    // 2. LV Campo (após aterramento respondido)
+    var aterramentoOk = document.querySelector('#sub-aterramento [name="modelo_aterramento"]')?.value !== '';
+    if (aterramentoOk) {
+      mostrarSecao('sub-lv-campo');
+      // Se LV gate = sim, badge fica visível
+      if (lvGate.value === 'sim') mostrarSecao('lv-confirmed-badge');
+    } else {
+      ocultarSecao('sub-lv-campo');
+      ocultarSecao('sub-risco-periodo');
+      ocultarSecao('sub-ambiental');
+      ocultarSecao('sub-local-intervencao');
+      ocultarSecao('sub-logistica');
+      ocultarSecao('sub-checklist');
+      ocultarSecao('sub-projeto');
+      ocultarSecao('sub-executar');
+      ocultarSecao('sub-atencao');
+      ocultarSecao('sub-anotacoes');
+      ocultarActionBar();
+      return;
+    }
+
+    // 3. Risco+Período (após cf_provisoria respondida)
+    var cfProv = document.querySelector('input[name="cf_provisoria"]:checked');
+    if (cfProv) {
+      mostrarSecao('sub-risco-periodo');
+    } else {
+      ocultarSecao('sub-risco-periodo');
+      ocultarSecao('sub-ambiental');
+      ocultarSecao('sub-local-intervencao');
+      ocultarSecao('sub-logistica');
+      ocultarSecao('sub-checklist');
+      ocultarSecao('sub-projeto');
+      ocultarSecao('sub-executar');
+      ocultarSecao('sub-atencao');
+      ocultarSecao('sub-anotacoes');
+      ocultarActionBar();
+      return;
+    }
+
+    // 4. Ambiental (após período_execucao respondido)
+    var periodo = document.getElementById('periodo_execucao')?.value || '';
+    if (periodo) {
+      mostrarSecao('sub-ambiental');
+    } else {
+      ocultarSecao('sub-ambiental');
+      ocultarSecao('sub-local-intervencao');
+      ocultarSecao('sub-logistica');
+      ocultarSecao('sub-checklist');
+      ocultarSecao('sub-projeto');
+      ocultarSecao('sub-executar');
+      ocultarSecao('sub-atencao');
+      ocultarSecao('sub-anotacoes');
+      ocultarActionBar();
+      return;
+    }
+
+    // 5. Local Intervenção (após ambiental completa)
+    if (secaoCompleta('sub-ambiental')) {
+      mostrarSecao('sub-local-intervencao');
+    } else {
+      ocultarSecao('sub-local-intervencao');
+      ocultarSecao('sub-logistica');
+      ocultarSecao('sub-checklist');
+      ocultarSecao('sub-projeto');
+      ocultarSecao('sub-executar');
+      ocultarSecao('sub-atencao');
+      ocultarSecao('sub-anotacoes');
+      ocultarActionBar();
+      return;
+    }
+
+    // 6. Logística (após local intervenção)
+    mostrarSecao('sub-logistica');
+
+    // 7. Checklist (após logística completa)
+    if (secaoCompleta('sub-logistica')) {
+      mostrarSecao('sub-checklist');
+    } else {
+      ocultarSecao('sub-checklist');
+      ocultarSecao('sub-projeto');
+      ocultarSecao('sub-executar');
+      ocultarSecao('sub-atencao');
+      ocultarSecao('sub-anotacoes');
+      ocultarActionBar();
+      return;
+    }
+
+    // 8. Projeto (após checklist completa)
+    if (secaoCompleta('sub-checklist')) {
+      mostrarSecao('sub-projeto');
+    } else {
+      ocultarSecao('sub-projeto');
+      ocultarSecao('sub-executar');
+      ocultarSecao('sub-atencao');
+      ocultarSecao('sub-anotacoes');
+      ocultarActionBar();
+      return;
+    }
+
+    // 9. Executar (após projeto completa)
+    if (secaoCompleta('sub-projeto')) {
+      mostrarSecao('sub-executar');
+    } else {
+      ocultarSecao('sub-executar');
+      ocultarSecao('sub-atencao');
+      ocultarSecao('sub-anotacoes');
+      ocultarActionBar();
+      return;
+    }
+
+    // 10. Atenção (após executar completa)
+    if (secaoCompleta('sub-executar')) {
+      mostrarSecao('sub-atencao');
+    } else {
+      ocultarSecao('sub-atencao');
+      ocultarSecao('sub-anotacoes');
+      ocultarActionBar();
+      return;
+    }
+
+    // 11. Anotações (após atenção completa)
+    if (secaoCompleta('sub-atencao')) {
+      mostrarSecao('sub-anotacoes');
+    } else {
+      ocultarSecao('sub-anotacoes');
+      ocultarActionBar();
+      return;
+    }
+
+    // 12. Barra de ações (após anotações)
+    mostrarActionBar();
     return;
   }
 
-  // Nada selecionado
   ocultarSecao('section-fv-content');
   ocultarSecao('section-nao-fv');
 }
 
-// ── INTERVENÇÃO CONDICIONAL ──
-function verificarIntervencao() {
-  var gates = ['padrao_terreno_3','autorizacao_passagem','travessia_ocup','formular_ocupar','amb_app','amb_unidade_conservacao','licenca_ambiental'];
-  var anySim = gates.some(function(name) {
-    var r = document.querySelector('input[name="' + name + '"]:checked');
-    return r && r.value === 'sim';
-  });
-  var details = document.getElementById('section-intervencao-details');
-  if (anySim) {
-    details.classList.remove('hidden');
-    details.classList.add('showing');
-  } else {
-    details.classList.add('hidden');
-    details.classList.remove('showing');
-  }
+function mostrarActionBar() {
+  var bar = document.getElementById('action-bar');
+  if (bar) { bar.classList.remove('hidden'); bar.classList.add('showing'); }
 }
-
-document.querySelectorAll('input[name="padrao_terreno_3"], input[name="autorizacao_passagem"], input[name="travessia_ocup"], input[name="formular_ocupar"], input[name="amb_app"], input[name="amb_unidade_conservacao"], input[name="licenca_ambiental"]').forEach(function(r) {
-  r.addEventListener('change', verificarIntervencao);
-});
+function ocultarActionBar() {
+  var bar = document.getElementById('action-bar');
+  if (bar) { bar.classList.add('hidden'); bar.classList.remove('showing'); }
+}
 
 // ── CALCULADORA SIGFI ──
 function formatarMoedaBR(valor) {
@@ -1245,6 +1378,41 @@ document.querySelectorAll('input[name="linha_viva_confirm"]').forEach(function(r
   });
 });
 
+// ── PROGRESSÃO: escuta mudanças em todos os campos que disparam desbloqueio ──
+document.querySelector('[name="modelo_aterramento"]')?.addEventListener('change', verificarProgressao);
+
+document.querySelectorAll('#sub-lv-campo input[type=radio]').forEach(function(r) {
+  r.addEventListener('change', verificarProgressao);
+});
+
+document.querySelectorAll('#sub-risco-periodo input[type=radio], #sub-risco-periodo .periodo-toggle .btn-toggle').forEach(function(el) {
+  el.addEventListener('click', function() { setTimeout(verificarProgressao, 50); });
+});
+
+document.querySelectorAll('#sub-ambiental input[type=radio]').forEach(function(r) {
+  r.addEventListener('change', verificarProgressao);
+});
+
+document.querySelectorAll('#sub-logistica input[type=radio]').forEach(function(r) {
+  r.addEventListener('change', verificarProgressao);
+});
+
+document.querySelectorAll('#sub-checklist input[type=radio]').forEach(function(r) {
+  r.addEventListener('change', verificarProgressao);
+});
+
+document.querySelectorAll('#sub-projeto input[type=radio]').forEach(function(r) {
+  r.addEventListener('change', verificarProgressao);
+});
+
+document.querySelectorAll('#sub-executar input[type=radio]').forEach(function(r) {
+  r.addEventListener('change', verificarProgressao);
+});
+
+document.querySelectorAll('#sub-atencao input[type=radio]').forEach(function(r) {
+  r.addEventListener('change', verificarProgressao);
+});
+
 // ── PERSISTÊNCIA ──
 function coletarDados() {
   var form = document.getElementById('form-viabilidade');
@@ -1280,8 +1448,7 @@ function preencherFormulario(dados) {
       el.value = dados[k];
     }
   });
-  verificarProgressao();
-  verificarIntervencao();
+  setTimeout(verificarProgressao, 100);
   fecharModal('modal-lista');
 }
 
@@ -1352,7 +1519,18 @@ function novoFormulario() {
   ocultarSecao('sub-lv-gate');
   ocultarSecao('sub-pos-lv');
   ocultarSecao('lv-confirmed-badge');
-  ocultarSecao('section-intervencao-details');
+  ocultarSecao('sub-aterramento');
+  ocultarSecao('sub-lv-campo');
+  ocultarSecao('sub-risco-periodo');
+  ocultarSecao('sub-ambiental');
+  ocultarSecao('sub-local-intervencao');
+  ocultarSecao('sub-logistica');
+  ocultarSecao('sub-checklist');
+  ocultarSecao('sub-projeto');
+  ocultarSecao('sub-executar');
+  ocultarSecao('sub-atencao');
+  ocultarSecao('sub-anotacoes');
+  ocultarActionBar();
   mostrarToast('📋 Novo formulário.', 'info');
 }
 
@@ -1368,25 +1546,6 @@ function mostrarToast(msg, tipo) {
 // ── PDF (UMA FOLHA - FV SO CLIENTE+FV, NAO-FV TUDO) ──
 function gerarPDF() {
   var form = document.getElementById('form-viabilidade');
-  var radiosGrupos = {};
-  form.querySelectorAll('input[type=radio]').forEach(function(r) {
-    if (!radiosGrupos[r.name]) radiosGrupos[r.name] = false;
-    if (r.checked) radiosGrupos[r.name] = true;
-  });
-  var semResposta = Object.entries(radiosGrupos).filter(function(e) { return !e[1]; });
-  if (semResposta.length > 0) {
-    document.querySelectorAll('.sem-resposta-aviso').forEach(function(el) { el.classList.remove('sem-resposta-aviso'); });
-    semResposta.forEach(function(e) {
-      var el = form.querySelector('[name="' + e[0] + '"]');
-      var container = el ? el.closest('.csn, .csn-num') : null;
-      if (container) container.classList.add('sem-resposta-aviso');
-    });
-    var primeira = document.querySelector('.sem-resposta-aviso');
-    if (primeira) primeira.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    if (!confirm('! ' + semResposta.length + ' pergunta(s) sem resposta (destacadas em laranja).\n\nGerar o PDF mesmo assim?')) return;
-  }
-  document.querySelectorAll('.sem-resposta-aviso').forEach(function(el) { el.classList.remove('sem-resposta-aviso'); });
-
   var { jsPDF } = window.jspdf;
   var doc = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
   var fd = new FormData(form);
@@ -1410,16 +1569,16 @@ function gerarPDF() {
   var utilW = pgW - margin * 2;
 
   // ── HEADER ──
-  doc.setFillColor(22,101,52); doc.rect(0,0,pgW,9,'F');
-  doc.setTextColor(255,255,255); doc.setFont('helvetica','bold'); doc.setFontSize(9);
+  doc.setFillColor(59,130,246); doc.rect(0,0,pgW,9,'F');
+  doc.setTextColor(255,255,255); doc.setFont('helvetica','bold'); doc.setFontSize(12);
   doc.text('FORMULARIO DE VIABILIDADE TECNICA - EKT ENGENHARIA',pgW/2,5,{align:'center'});
-  doc.setFontSize(5.5);
+  doc.setFontSize(11);
   doc.text('Neoenergia Elektro - EKT-FRG-EXE-001 - Rev.06',pgW/2,8,{align:'center'});
 
   var y = 11;
   if (lv) {
     doc.setFillColor(220,38,38); doc.rect(0,y,pgW,5,'F');
-    doc.setTextColor(255,255,255); doc.setFontSize(7);
+    doc.setTextColor(255,255,255); doc.setFontSize(11);
     doc.text('! ATENCAO: LINHA VIVA CONFIRMADA NESTA OBRA !',pgW/2,y+3.5,{align:'center'});
     y += 6.5;
   }
@@ -1436,8 +1595,8 @@ function gerarPDF() {
     ['TEL. PROJETISTA 2', t('ddd_projetista2','telefone_projetista2')],
   ];
 
-  doc.setFillColor(22,101,52); doc.rect(margin,y,utilW,4,'F');
-  doc.setTextColor(255,255,255); doc.setFont('helvetica','bold'); doc.setFontSize(6);
+  doc.setFillColor(59,130,246); doc.rect(margin,y,utilW,4,'F');
+  doc.setTextColor(255,255,255); doc.setFont('helvetica','bold'); doc.setFontSize(9);
   doc.text('DADOS DO CLIENTE / PROJETISTAS',margin+2,y+2.8);
   y += 4.5;
 
@@ -1452,9 +1611,9 @@ function gerarPDF() {
       var x = margin + c * colW2;
       doc.setFillColor(248,250,252); doc.rect(x,y,colW2,rowH,'F');
       doc.rect(x,y,colW2,rowH,'S');
-      doc.setFont('helvetica','bold'); doc.setFontSize(6.2); doc.setTextColor(37,99,235);
+      doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor(37,99,235);
       doc.text(item[0], x+1.5, y+2.6);
-      doc.setFont('helvetica','bold'); doc.setFontSize(8); doc.setTextColor(15,23,42);
+      doc.setFont('helvetica','bold'); doc.setFontSize(11); doc.setTextColor(15,23,42);
       doc.text(item[1]||'-', x+1.5, y+5.8);
     }
     y += rowH;
@@ -1468,7 +1627,7 @@ function gerarPDF() {
     var sigfiNo = v('sigfi_alteracao');
 
     doc.setFillColor(37,99,235); doc.rect(margin,y,utilW,4.5,'F');
-    doc.setTextColor(255,255,255); doc.setFont('helvetica','bold'); doc.setFontSize(6);
+    doc.setTextColor(255,255,255); doc.setFont('helvetica','bold'); doc.setFontSize(9);
     doc.text('DADOS DO FOTOVOLTAICO',margin+2,y+3);
     y += 5;
 
@@ -1486,9 +1645,9 @@ function gerarPDF() {
         var x = margin + c * colW2;
         doc.setFillColor(248,250,252); doc.rect(x,y,colW2,rowH,'F');
         doc.rect(x,y,colW2,rowH,'S');
-        doc.setFont('helvetica','bold'); doc.setFontSize(6.2); doc.setTextColor(37,99,235);
+        doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor(37,99,235);
         doc.text(item[0], x+1.5, y+2.6);
-        doc.setFont('helvetica','bold'); doc.setFontSize(8); doc.setTextColor(15,23,42);
+        doc.setFont('helvetica','bold'); doc.setFontSize(11); doc.setTextColor(15,23,42);
         doc.text(item[1]||'-', x+1.5, y+5.8);
       }
       y += rowH;
@@ -1505,7 +1664,7 @@ function gerarPDF() {
     var total = moRet + moInst + estrut + sistema;
 
     doc.setFillColor(217,119,6); doc.rect(margin,y,utilW,4.5,'F');
-    doc.setTextColor(255,255,255); doc.setFont('helvetica','bold'); doc.setFontSize(6);
+    doc.setTextColor(255,255,255); doc.setFont('helvetica','bold'); doc.setFontSize(9);
     doc.text('ORCAMENTO SIGFI',margin+2,y+3);
     y += 5;
 
@@ -1523,9 +1682,9 @@ function gerarPDF() {
         var x = margin + c * colW2;
         doc.setFillColor(255,255,255); doc.rect(x,y,colW2,rowH,'F');
         doc.setDrawColor(200,200,200); doc.rect(x,y,colW2,rowH,'S');
-        doc.setFont('helvetica','bold'); doc.setFontSize(6.2); doc.setTextColor(100,60,0);
+        doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor(100,60,0);
         doc.text(item[0], x+1.5, y+2.6);
-        doc.setFont('helvetica','bold'); doc.setFontSize(8); doc.setTextColor(15,23,42);
+        doc.setFont('helvetica','bold'); doc.setFontSize(11); doc.setTextColor(15,23,42);
         doc.text(item[1], x+1.5, y+5.8);
       }
       y += rowH;
@@ -1535,12 +1694,12 @@ function gerarPDF() {
     if (semCusto) {
       doc.setFillColor(240,253,244); doc.rect(margin,y,utilW,totalRowH,'F');
       doc.setDrawColor(22,163,74); doc.rect(margin,y,utilW,totalRowH,'S');
-      doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor(22,163,74);
+      doc.setFont('helvetica','bold'); doc.setFontSize(12); doc.setTextColor(22,163,74);
       doc.text('TOTAL - SEM CUSTO AO CLIENTE: ' + formatarMoedaBR(total), margin+3, y+5.7);
     } else {
       doc.setFillColor(255,242,242); doc.rect(margin,y,utilW,totalRowH,'F');
       doc.setDrawColor(220,38,38); doc.rect(margin,y,utilW,totalRowH,'S');
-      doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor(220,38,38);
+      doc.setFont('helvetica','bold'); doc.setFontSize(12); doc.setTextColor(220,38,38);
       doc.text('TOTAL - COM CUSTO AO CLIENTE: ' + formatarMoedaBR(total), margin+3, y+5.7);
     }
 
@@ -1605,7 +1764,6 @@ function gerarPDF() {
       ['REP. CALC. ESP.', v('reparo_calcada_especial')],
       ['CERCAS DXF', v('indicado_dxf')],
       ['ELOS MONT/JUST', v('efeito_montante_jusante')],
-      ['DESC. CERCAS', v('indicacao_cercas_dxf')],
       ['SUBST. TRAFO', v('substituir_trafo')],
       ['SUBST. BARRAM.', v('barramento')],
       ['LIG. CHAVE/PARAR', v('ligacao_cc_pr')],
@@ -1619,7 +1777,7 @@ function gerarPDF() {
     var camposVermelhos = ['LINHA VIVA','ESTRUT. IMPEDE LV','ESTRUT. CANADENSE','FIO CAZ/CABO 06','POSTE PODRE','RISCO EMINENTE'];
 
     doc.setFillColor(37,99,235); doc.rect(margin,y,utilW,4,'F');
-    doc.setTextColor(255,255,255); doc.setFont('helvetica','bold'); doc.setFontSize(6);
+    doc.setTextColor(255,255,255); doc.setFont('helvetica','bold'); doc.setFontSize(9);
     doc.text('DADOS TECNICOS',margin+2,y+2.8);
     y += 4.5;
 
@@ -1645,10 +1803,10 @@ function gerarPDF() {
         doc.setFillColor(fillColor[0], fillColor[1], fillColor[2]);
         doc.rect(x,y,colW4-0.3,rowH4,'F');
         doc.setDrawColor(210,210,210); doc.rect(x,y,colW4-0.3,rowH4,'S');
-        doc.setFont('helvetica','bold'); doc.setFontSize(6.2);
+        doc.setFont('helvetica','bold'); doc.setFontSize(9);
         doc.setTextColor(37,99,235);
         doc.text(label, x+1, y+2.8);
-        doc.setFont('helvetica','bold'); doc.setFontSize(8.5);
+        doc.setFont('helvetica','bold'); doc.setFontSize(11);
         if (value.toUpperCase() === 'SIM' && camposVermelhos.indexOf(label) >= 0) doc.setTextColor(180,0,0);
         else if (value.toUpperCase() === 'SIM') doc.setTextColor(22,163,74);
         else if (value.toUpperCase() === 'NAO' || value.toUpperCase() === 'NAO') doc.setTextColor(200,30,30);
@@ -1662,15 +1820,15 @@ function gerarPDF() {
     // Anotacoes
     var altRest = pgH - margin - y - 6;
     if (altRest > 8) {
-      doc.setFillColor(22,101,52); doc.rect(margin,y,utilW,4,'F');
-      doc.setTextColor(255,255,255); doc.setFont('helvetica','bold'); doc.setFontSize(6);
+      doc.setFillColor(59,130,246); doc.rect(margin,y,utilW,4,'F');
+      doc.setTextColor(255,255,255); doc.setFont('helvetica','bold'); doc.setFontSize(9);
       doc.text('ANOTACOES GERAIS',margin+2,y+2.8);
       y += 4.5;
       var altAnot = pgH - margin - y - 6;
       if (altAnot > 5) {
         doc.setFillColor(255,255,255); doc.setDrawColor(180,180,180); doc.setLineWidth(0.2);
         doc.rect(margin,y,utilW,altAnot,'FD');
-        doc.setFont('helvetica','normal'); doc.setFontSize(5.5); doc.setTextColor(30,30,30);
+        doc.setFont('helvetica','normal'); doc.setFontSize(11); doc.setTextColor(30,30,30);
         var textoNota = (anotacoes && anotacoes!=='-') ? anotacoes : '(sem anotacoes)';
         var linhasNota = doc.splitTextToSize(textoNota, utilW-8);
         doc.text(linhasNota, margin+3, y+3);
@@ -1679,11 +1837,11 @@ function gerarPDF() {
   }
 
   // RODAPE
-  doc.setFontSize(5.5); doc.setTextColor(150,150,150);
+  doc.setFontSize(11); doc.setTextColor(150,150,150);
   doc.text('Documento Interno EKT - Pag. 1/1',pgW/2,pgH-3,{align:'center'});
   if (lv) {
     doc.setFillColor(220,38,38); doc.rect(236,pgH-15,55,8,'F');
-    doc.setFontSize(6); doc.setFont('helvetica','bold'); doc.setTextColor(255,255,255);
+    doc.setFontSize(9); doc.setFont('helvetica','bold'); doc.setTextColor(255,255,255);
     doc.text('! LINHA VIVA',263.5,pgH-9.5,{align:'center'});
   }
 
@@ -1714,9 +1872,8 @@ function salvarJPG() {
 
 // ── INICIALIZAÇÃO ──
 document.addEventListener('DOMContentLoaded', function() {
+  ocultarActionBar();
   verificarProgressao();
-  verificarIntervencao();
-  // Inicializar se houver dados carregados
 });
 </script>
 </body>

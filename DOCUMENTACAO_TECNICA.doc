@@ -1,0 +1,137 @@
+<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<style>
+body{font-family:'Segoe UI',Arial,sans-serif;font-size:11pt;color:#1e293b;background:#fff;margin:40px 50px;line-height:1.5}
+h1{font-size:22pt;color:#1e40af;border-bottom:3px solid #3b82f6;padding-bottom:8px;margin-top:30px}
+h2{font-size:16pt;color:#1e40af;border-bottom:2px solid #93c5fd;padding-bottom:5px;margin-top:25px;background:#eff6ff;padding:8px 12px}
+h3{font-size:13pt;color:#2563eb;margin-top:20px}
+p{margin:6px 0}
+.code{font-family:Consolas,Courier New,monospace;background:#f1f5f9;border:1px solid #e2e8f0;padding:10px 14px;font-size:9.5pt;white-space:pre-wrap;margin:10px 0}
+.info{background:#eff6ff;border-left:4px solid #3b82f6;padding:10px 14px;margin:10px 0}
+.warn{background:#fef3c7;border-left:4px solid #f59e0b;padding:10px 14px;margin:10px 0}
+table{border-collapse:collapse;width:100%;margin:12px 0;font-size:10pt}
+th{background:#1e40af;color:#fff;padding:8px 10px;text-align:left;font-weight:700;border:1px solid #1e3a8a}
+td{padding:6px 10px;border:1px solid #cbd5e1}
+tr:nth-child(even) td{background:#f8fafc}
+tr:nth-child(odd) td{background:#fff}
+.tbl-green th{background:#15803d;border-color:#166534}
+.tbl-amber th{background:#b45309;border-color:#92400e}
+.tag{background:#dbeafe;color:#1e40af;padding:1px 8px;font-size:9pt;font-weight:600}
+.tag-red{background:#fee2e2;color:#b91c1c}
+.tag-green{background:#dcfce7;color:#166534}
+.footer{margin-top:40px;padding-top:12px;border-top:2px solid #e2e8f0;font-size:9pt;color:#64748b;text-align:center}
+</style>
+</head>
+<body>
+
+<h1>Formulario de Viabilidade EKT</h1>
+<p style="font-size:12pt;color:#475569;"><strong>Documentacao Tecnica para Integracao</strong> &mdash; EKT-FRG-EXE-001 &middot; Rev.06</p>
+
+<h2>1. Visao Geral</h2>
+<p>Single page application 100% front-end em arquivo unico <strong>index.html</strong> (~90 KB). Executada no navegador do usuario, sem servidor ou banco de dados na versao atual. Funciona offline apos primeiro carregamento.</p>
+
+<h3>Dependencias Externas (CDN)</h3>
+<div class="warn"><strong>Atencao:</strong> Necessaria internet na primeira carga para cache. Depois funciona offline.</div>
+<table>
+<tr><th>Biblioteca</th><th>Versao</th><th>Finalidade</th></tr>
+<tr><td>jsPDF</td><td>2.5.1</td><td>Geracao do PDF em paisagem</td></tr>
+<tr><td>jspdf-autotable</td><td>3.8.2</td><td>Tabelas no PDF</td></tr>
+<tr><td>html2canvas</td><td>1.4.1</td><td>Captura da tela para JPG</td></tr>
+<tr><td>Google Fonts</td><td>&mdash;</td><td>Tipografia DM Sans / DM Mono</td></tr>
+</table>
+
+<h2>2. Arquitetura e Fluxo</h2>
+<p>O formulario usa <strong>blocos progressivos</strong>: cada secao so e exibida quando a anterior e preenchida. Controle feito pela funcao <code>verificarProgressao()</code>, disparada a cada alteracao de input.</p>
+<p>Cada bloco tem classes <code>.progressive-section .hidden</code>. As funcoes <code>mostrarSecao()</code> e <code>ocultarSecao()</code> controlam a visibilidade. A funcao <code>secaoCompleta(id)</code> valida se todos os radios do bloco foram respondidos.</p>
+
+<h3>Arvore de Navegacao (FV = NAO)</h3>
+<table class="tbl-green">
+<tr><th>#</th><th>Bloco</th><th>Gatilho</th></tr>
+<tr><td>&mdash;</td><td>Identificacao</td><td>Sempre visivel</td></tr>
+<tr><td>&mdash;</td><td>Gate Fotovoltaico</td><td>Sempre visivel</td></tr>
+<tr><td>1</td><td>Tensao da Rede</td><td>FV = NAO</td></tr>
+<tr><td>2</td><td>Regime de Linha Viva</td><td>Tensao respondida</td></tr>
+<tr><td>3</td><td>Aterramento</td><td>Linha Viva respondida</td></tr>
+<tr><td>4</td><td>LV Campo</td><td>Aterramento preenchido</td></tr>
+<tr><td>5</td><td>Risco + Periodo Execucao</td><td>Chave Faca respondida</td></tr>
+<tr><td>6</td><td>Ambiental</td><td>Periodo preenchido</td></tr>
+<tr><td>7</td><td>Local da Intervencao</td><td>Ambiental completo</td></tr>
+<tr><td>8</td><td>Logistica</td><td>Local liberado</td></tr>
+<tr><td>9</td><td>Checklist</td><td>Logistica completo</td></tr>
+<tr><td>10</td><td>Projeto &amp; Diversos</td><td>Checklist completo</td></tr>
+<tr><td>11</td><td>Executar Obra</td><td>Projeto completo</td></tr>
+<tr><td>12</td><td>Atencao</td><td>Executar completo</td></tr>
+<tr><td>13</td><td>Anotacoes Gerais</td><td>Atencao completo</td></tr>
+<tr><td>&#10003;</td><td>Barra de Acoes</td><td>Anotacoes liberado</td></tr>
+</table>
+
+<h2>3. Onde os Dados Ficam Armazenados</h2>
+<h3>3.1. Estado Atual: localStorage</h3>
+<p>Todos os dados do formulario ficam no <strong>localStorage do navegador</strong> do usuario. Estrutura:</p>
+<div class="code">localStorage.setItem('formularios', JSON.stringify(lista));<br><br>// Cada item:<br>{<br>  id: 1712345678901,<br>  nome_arquivo: "OBRA JOAO",<br>  nome_cliente: "JOAO SILVA",<br>  codigo_projeto: "EKT-001",<br>  ... ~70 campos<br>}</div>
+
+<h3>3.2. Limitacoes</h3>
+<table class="tbl-amber">
+<tr><th>Aspecto</th><th>Detalhe</th><th>Impacto</th></tr>
+<tr><td>Capacidade</td><td>5-10 MB por dominio</td><td>Suficiente para rascunhos</td></tr>
+<tr><td>Persistencia</td><td>Apenas no navegador</td><td>Nao acompanha o usuario</td></tr>
+<tr><td>Compartilhamento</td><td>Nao ha</td><td>Cada dispositivo tem seus dados</td></tr>
+<tr><td>Backup</td><td>Nenhum</td><td>Cache apaga tudo</td></tr>
+<tr><td>Acesso servidor</td><td>Inexistente</td><td>Servidor nao ve os dados</td></tr>
+</table>
+<div class="warn"><strong>Conclusao:</strong> localStorage e adequado para rascunhos temporarios, mas nao substitui um banco de dados corporativo.</div>
+
+<h2>4. Integracao com Banco Corporativo</h2>
+<h3>4.1. Arquitetura Recomendada</h3>
+<div class="code">[Navegador] -- POST /api/viabilidade --&gt; [Servidor] -- INSERT --&gt; [Banco]<br>                                     &lt;-- { id, status } --</div>
+
+<h3>4.2. Implementacao</h3>
+<p>Acrescentar ao index.html:</p>
+<div class="code">async function enviarParaServidor(dados) {<br>  const res = await fetch('/api/viabilidade', {<br>    method: 'POST',<br>    headers: { 'Content-Type': 'application/json' },<br>    body: JSON.stringify(dados)<br>  });<br>  if (!res.ok) throw new Error('Falha no servidor');<br>  return res.json();<br>}</div>
+
+<h3>4.3. Estrategia Hibrida</h3>
+<table>
+<tr><th>Camada</th><th>Finalidade</th><th>Uso</th></tr>
+<tr><td><strong>localStorage</strong></td><td>Rascunho local / offline</td><td>Sempre</td></tr>
+<tr><td><strong>API REST</strong></td><td>Registro oficial</td><td>Quando online</td></tr>
+<tr><td><strong>Fila sincronizacao</strong></td><td>Envio pendente</td><td>Quando volta online</td></tr>
+</table>
+<div class="info"><strong>Sugestao:</strong> Usar navigator.onLine para detectar conectividade e enviar ao servidor apenas quando online, acumulando em fila local os registros pendentes.</div>
+
+<h2>5. Mapeamento para SQL (resumo)</h2>
+<p>Arquivo completo: <strong>mapping_dados.csv</strong> na mesma pasta com todos os ~84 campos.</p>
+<table class="tbl-green">
+<tr><th>Secao</th><th>Campos</th><th>Qtd</th></tr>
+<tr><td>Identificacao</td><td>nome_cliente, codigo_projeto, telefones, projetistas, data</td><td>11</td></tr>
+<tr><td>Gate FV</td><td>fotovoltaico_gate</td><td>1</td></tr>
+<tr><td>Fotovoltaico</td><td>ligacao_nova_fv, alteracao_carga_fv, sigfi_atual, sigfi_alteracao</td><td>4</td></tr>
+<tr><td>Tensao</td><td>tensao_345_chk, tensao_138_chk</td><td>2</td></tr>
+<tr><td>Linha Viva + Campo</td><td>linha_viva, manobra, big_jumper, bt_energizado, ...</td><td>13</td></tr>
+<tr><td>Aterramento</td><td>modelo_aterramento, obs_aterramento</td><td>2</td></tr>
+<tr><td>Risco + Periodo</td><td>risco_eminente, prazo_risco, periodo_execucao</td><td>3</td></tr>
+<tr><td>Ambiental</td><td>amb_abertura_faixa, poda, corte, aut_prop, app, ...</td><td>12</td></tr>
+<tr><td>Local Intervencao</td><td>intervencao_em</td><td>1</td></tr>
+<tr><td>Logistica</td><td>distribuir_postes, acesso, sinal, porteira, ...</td><td>8</td></tr>
+<tr><td>Checklist</td><td>abelha, rocha, gas, calcada, cercas, elos, ...</td><td>9</td></tr>
+<tr><td>Projeto &amp; Diversos</td><td>substituir_trafo, barramento, glv, adequacao, ...</td><td>8</td></tr>
+<tr><td>Executar Obra</td><td>trocar_medidores, medidor_ligado, num_clientes, ...</td><td>5</td></tr>
+<tr><td>Atencao</td><td>caixa_derivacao, tubulacao, fibra, telefonia, ...</td><td>6</td></tr>
+<tr><td>Anotacoes</td><td>anotacoes</td><td>1</td></tr>
+</table>
+
+<h2>6. Resumo para Decisao</h2>
+<table>
+<tr><th>Item</th><th>Situacao Atual</th><th>Recomendacao</th></tr>
+<tr><td>Armazenamento</td><td>localStorage (navegador)</td><td>Manter rascunhos + adicionar API REST</td></tr>
+<tr><td>Compartilhamento</td><td>Nenhum</td><td>Banco de dados corporativo</td></tr>
+<tr><td>Offline</td><td>Sim (apos cache)</td><td>Manter</td></tr>
+<tr><td>PDF</td><td>Gerado no cliente</td><td>Pode armazenar como blob no BD</td></tr>
+<tr><td>JPG</td><td>Gerado no cliente</td><td>Idem</td></tr>
+<tr><td>Dados estruturados</td><td>Objeto JS</td><td>Mapeamento 1:1 para tabela SQL</td></tr>
+</table>
+
+<div class="footer">Documentacao interna EKT &mdash; Revisao 06 &mdash; junho/2026<br>EKT-FRG-EXE-001</div>
+
+</body>
+</html>
