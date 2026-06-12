@@ -1442,7 +1442,7 @@ function gerarPDF() {
   y += 4.5;
 
   var colW2 = utilW / 2;
-  var rowH = 5.2;
+  var rowH = 6.3;
   doc.setDrawColor(200,200,200); doc.setLineWidth(0.15);
   for (var i=0; i<clientData.length; i+=2) {
     for (var c=0; c<2; c++) {
@@ -1452,10 +1452,10 @@ function gerarPDF() {
       var x = margin + c * colW2;
       doc.setFillColor(248,250,252); doc.rect(x,y,colW2,rowH,'F');
       doc.rect(x,y,colW2,rowH,'S');
-      doc.setFont('helvetica','bold'); doc.setFontSize(5.5); doc.setTextColor(37,99,235);
-      doc.text(item[0], x+1.5, y+2);
-      doc.setFont('helvetica','normal'); doc.setFontSize(6.5); doc.setTextColor(15,23,42);
-      doc.text(item[1]||'-', x+1.5, y+4);
+      doc.setFont('helvetica','bold'); doc.setFontSize(6.2); doc.setTextColor(37,99,235);
+      doc.text(item[0], x+1.5, y+2.6);
+      doc.setFont('helvetica','bold'); doc.setFontSize(8); doc.setTextColor(15,23,42);
+      doc.text(item[1]||'-', x+1.5, y+5.8);
     }
     y += rowH;
   }
@@ -1486,10 +1486,10 @@ function gerarPDF() {
         var x = margin + c * colW2;
         doc.setFillColor(248,250,252); doc.rect(x,y,colW2,rowH,'F');
         doc.rect(x,y,colW2,rowH,'S');
-        doc.setFont('helvetica','bold'); doc.setFontSize(5.5); doc.setTextColor(37,99,235);
-        doc.text(item[0], x+1.5, y+2);
-        doc.setFont('helvetica','normal'); doc.setFontSize(6.5); doc.setTextColor(15,23,42);
-        doc.text(item[1]||'-', x+1.5, y+4);
+        doc.setFont('helvetica','bold'); doc.setFontSize(6.2); doc.setTextColor(37,99,235);
+        doc.text(item[0], x+1.5, y+2.6);
+        doc.setFont('helvetica','bold'); doc.setFontSize(8); doc.setTextColor(15,23,42);
+        doc.text(item[1]||'-', x+1.5, y+5.8);
       }
       y += rowH;
     }
@@ -1523,25 +1523,25 @@ function gerarPDF() {
         var x = margin + c * colW2;
         doc.setFillColor(255,255,255); doc.rect(x,y,colW2,rowH,'F');
         doc.setDrawColor(200,200,200); doc.rect(x,y,colW2,rowH,'S');
-        doc.setFont('helvetica','bold'); doc.setFontSize(5.5); doc.setTextColor(100,60,0);
-        doc.text(item[0], x+1.5, y+2);
-        doc.setFont('helvetica','normal'); doc.setFontSize(6.5); doc.setTextColor(15,23,42);
-        doc.text(item[1], x+1.5, y+4);
+        doc.setFont('helvetica','bold'); doc.setFontSize(6.2); doc.setTextColor(100,60,0);
+        doc.text(item[0], x+1.5, y+2.6);
+        doc.setFont('helvetica','bold'); doc.setFontSize(8); doc.setTextColor(15,23,42);
+        doc.text(item[1], x+1.5, y+5.8);
       }
       y += rowH;
     }
-    var totalRowH = 7;
+    var totalRowH = 8.5;
     var semCusto = ehLN || BASE_SIGFI_PU.includes(pedidoNum);
     if (semCusto) {
       doc.setFillColor(240,253,244); doc.rect(margin,y,utilW,totalRowH,'F');
       doc.setDrawColor(22,163,74); doc.rect(margin,y,utilW,totalRowH,'S');
-      doc.setFont('helvetica','bold'); doc.setFontSize(7); doc.setTextColor(22,163,74);
-      doc.text('TOTAL - SEM CUSTO AO CLIENTE: ' + formatarMoedaBR(total), margin+3, y+4.8);
+      doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor(22,163,74);
+      doc.text('TOTAL - SEM CUSTO AO CLIENTE: ' + formatarMoedaBR(total), margin+3, y+5.7);
     } else {
       doc.setFillColor(255,242,242); doc.rect(margin,y,utilW,totalRowH,'F');
       doc.setDrawColor(220,38,38); doc.rect(margin,y,utilW,totalRowH,'S');
-      doc.setFont('helvetica','bold'); doc.setFontSize(7); doc.setTextColor(220,38,38);
-      doc.text('TOTAL - COM CUSTO AO CLIENTE: ' + formatarMoedaBR(total), margin+3, y+4.8);
+      doc.setFont('helvetica','bold'); doc.setFontSize(9); doc.setTextColor(220,38,38);
+      doc.text('TOTAL - COM CUSTO AO CLIENTE: ' + formatarMoedaBR(total), margin+3, y+5.7);
     }
 
     y += totalRowH + 1.5;
@@ -1624,7 +1624,7 @@ function gerarPDF() {
     y += 4.5;
 
     var colW4 = utilW / 4;
-    var rowH4 = 5;
+    var rowH4 = 7;
     var cols = 4;
 
     for (var i=0; i<techData.length; i+=cols) {
@@ -1645,14 +1645,15 @@ function gerarPDF() {
         doc.setFillColor(fillColor[0], fillColor[1], fillColor[2]);
         doc.rect(x,y,colW4-0.3,rowH4,'F');
         doc.setDrawColor(210,210,210); doc.rect(x,y,colW4-0.3,rowH4,'S');
-        doc.setFont('helvetica','bold'); doc.setFontSize(4.8);
+        doc.setFont('helvetica','bold'); doc.setFontSize(6.2);
+        doc.setTextColor(37,99,235);
+        doc.text(label, x+1, y+2.8);
+        doc.setFont('helvetica','bold'); doc.setFontSize(8.5);
         if (value.toUpperCase() === 'SIM' && camposVermelhos.indexOf(label) >= 0) doc.setTextColor(180,0,0);
         else if (value.toUpperCase() === 'SIM') doc.setTextColor(22,163,74);
         else if (value.toUpperCase() === 'NAO' || value.toUpperCase() === 'NAO') doc.setTextColor(200,30,30);
-        else doc.setTextColor(37,99,235);
-        doc.text(label, x+1, y+2.2);
-        doc.setFont('helvetica','normal'); doc.setFontSize(5.2); doc.setTextColor(15,23,42);
-        doc.text(value, x+1, y+4);
+        else doc.setTextColor(15,23,42);
+        doc.text(value, x+1, y+6.2);
       }
       y += rowH4;
     }
